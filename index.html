@@ -1,8 +1,25 @@
 <html>
     <head>
+        <link rel="stylesheet" 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
+              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+              crossorigin="anonymous">
+
+        <style>
+            .vertical{
+                margin-top:40%;
+            }
+        </style>
+
         <title>Bethan and Edward's Wedding</title>
         <script>
-            function showPopup(form) {
+            function handleKeydown() {
+                if(event.key === 'Enter') {
+                    handleSubmit();
+                }
+            }
+
+            function handleSubmit() {
                 const password = document.getElementById('password').value;
 
                 if (password === "day") {
@@ -18,9 +35,11 @@
         </script>
     </head>
     <body>
-        <h1>Bethan and Edward's Wedding</h1>
-        <p>Please enter the password from your invite</p>
-        <input id="password" type="text" />
-        <input type="submit" value="&lt;Go&gt;" onclick="showPopup()"/>
+        <div class="text-center vertical">
+            <h1>Bethan and Edward's Wedding</h1>
+            <p>Please enter the password from your invite</p>
+            <input id="password" type="text" onkeydown="handleKeydown()"/>
+            <input type="submit" value="&lt;Go&gt;" onclick="handleSubmit()"/>
+        </div>
     </body>
 </html>
