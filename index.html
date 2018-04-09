@@ -20,7 +20,7 @@
             }
 
             function handleSubmit() {
-                const password = document.getElementById('password').value;
+                const password = document.getElementById('password').value.toLowerCase();
 
                 if (password === "day") {
                    window.location.href = "./day.html";
