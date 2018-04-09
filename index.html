@@ -1,9 +1,26 @@
 <html>
     <head>
         <title>Bethan and Edward's Wedding</title>
+        <script>
+            function showPopup(form) {
+                const password = document.getElementById('password').value;
+
+                if (password === "day") {
+                   window.location.href = "./day.html";
+                }
+                else if (password === "evening") {
+                   window.location.href = "./day.html";
+                }
+                else {
+                    alert("Incorrect password, try again or contact Edward or Bethan!");
+                }
+            }
+        </script>
     </head>
     <body>
         <h1>Bethan and Edward's Wedding</h1>
-        <p>Hello Bethan, welcome to a website</p>
+        <p>Please enter the password from your invite</p>
+        <input id="password" type="text" />
+        <input type="submit" value="&lt;Go&gt;" onclick="showPopup()"/>
     </body>
 </html>
