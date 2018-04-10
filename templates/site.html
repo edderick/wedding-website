@@ -2,12 +2,7 @@
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
-        <style>
-        body {
-            background-color: rgb(250,250,250) 
-        }
-
-        </style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <script>
 
@@ -27,37 +22,49 @@
                     return;
                 }
                 
-                if (email === "edderick@live.co.uk")
-                {
-                    window.location.href = './evening_rsvp_existing.html';
-                }
-                else {
-                    window.location.href = './evening_rsvp_new.html';
-                }
+				$.post("/validate_email", { email }, (data) => {
+					if (data === "success") {
+					   window.location.href = "/rsvp";
+					}
+					else {
+                        alert("That is probably not a valid email. Please try another");
+					}
+				});
             }
         </script>
             
 
-        <title>Edward and Bethan's Wedding Reception</title>
+        <title>Edward and Bethan's Wedding</title>
     </head>
     <body>
         <div class="text-center">
             <div class="container">
-                <h1>Edward &amp; Bethan's Wedding Recpeption</h1>
+                <h1>Edward &amp; Bethan's Wedding</h1>
                 <h2>Saturday 11th August 2018</h2>
             </div>
             <div class="container">
                 <h2>RSPV</h2>
-                <p>Please let us know if you can attend by Tuesday 31st July 2018</p>
+                <p>Please let us know if you can attend by Thursday 31st May 2018</p>
                 <p>Your E-Mail: 
-                    <input id="email" type="text" onkeydown="handleKeydown()"/> 
+                <input id="email" type="text" onkeydown="handleKeydown()" value='{{ email }}'/> 
                     <input type="submit" onclick="handleSubmit()" value="&lt;Go&gt;"/>
                 </p>
             </div>
+            {% if day_guest %}
+            <div class="container">
+                <h2>Ceremony</h2>
+                    <h3>St Phillip's Church, Maidstone</h3>
+                    <p>Arrive at 12:30 to be seated by 12:45</p>
+            </div>
+            {% endif %}
             <div class="container">
                 <h2>Reception</h2>
                     <h3>Windy Ridge, Offham</h3>
+                    {% if day_guest %}
+                    <p>15:00 till Late</p>
+                    {% else %}
                     <p>19:30 till Late</p>
+                    {% endif %}
             </div>
             <div class="container">
                 <h2>Gifts</h2>
@@ -69,11 +76,6 @@
                     towards our honeymoon or a future house deposit.
                 </p>
             </div>
-            
         </div>
-        <div class="footer">
-            <img width="100%"src='images/welcome.jpg'/>
-        </div>
-
     </body>
 </html>

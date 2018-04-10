@@ -2,10 +2,11 @@
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <style>
             body {
-                background: url("images/background.png") no-repeat center center fixed;
+                background: url("static/images/background.png") no-repeat center center fixed;
                 background-size: cover;
             }
 
@@ -24,16 +25,15 @@
         <script>
             function handleSubmit() {
                 const password = document.getElementById('password').value.toLowerCase().trim();
-
-                if (password === "day") {
-                   window.location.href = "./day.html";
-                }
-                else if (password === "evening") {
-                   window.location.href = "./evening.html";
-                }
-                else {
-                    alert("Incorrect password, try again or contact Edward or Bethan!");
-                }
+            
+				$.post("/validate_password", { password }, (data) => {
+					if (data === "success") {
+					   window.location.href = "/site";
+					}
+					else {
+						alert("Incorrect password, try again or contact Edward or Bethan!");
+					}
+				});
             }
         </script>
     </head>
@@ -44,12 +44,11 @@
                 <h2>Saturday 11th August 2018</h2>
                 <br />
                 <h4>Please enter the password from your invite</h4>
-                <form class="form-inline" action="javascript:void(0);">
-                <div class="form-group">
-                    <input id="password" type="text" class="form-control" type="text"/>
-                   
-                    <button onclick="handleSubmit()" class="btn btn-primary">&lt;Go&gt;</button>
-                </div>
+                <form id='form' class="form-inline" action="javacript:void()">
+					<div class="form-group">
+						<input id="password" type="text" class="form-control"/>
+						<button onclick="handleSubmit()" class="btn btn-primary">&lt;Go&gt;</button>
+					</div>
                 </form>
             </div>
         </div>

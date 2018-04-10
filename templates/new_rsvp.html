@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title>RSVP for Bethan and Edward's Wedding Reception</title>
+        <title>RSVP for Bethan and Edward's Wedding</title>
     </head>
     <body>
-        <h1>RSVP for email@address.com</h1>
+        <h1>RSVP for {{ email }}</h1>
 
         Number of guests you'd like to RSVP for:
         <select>
@@ -37,7 +37,7 @@
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
-                <a href="#">(See Pizza Menu)</a>
+                <a href="#">(See Menu)</a>
             </p>
             <p>
                 Please describe dietarty requirements: 
@@ -62,11 +62,19 @@
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
-                <a href="#">(See Pizza Menu)</a>
+                <a href="#">(See Menu)</a>
             </p>
             <p>
                 Please describe dietarty requirements: 
                 <textarea></textarea>
+            </p>
+
+            <p>
+                <a href='#'>Submit!</a>
+            </p>
+
+            <p>
+                <a href='/site'>Back to main site</a>
             </p>
 
     </body>
