@@ -3,12 +3,22 @@ from flask import render_template
 from flask import request
 from flask import make_response
 from flask import abort, redirect, url_for
+import json
 
+import sqlite3
 
 email_to_rsvp = {}
 
 
 app = Flask(__name__)
+
+
+@app.route("/init")
+def init():
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+    return "Database initialized"
+
 
 @app.route("/")
 def index():
@@ -84,8 +94,6 @@ def rsvp():
         return redirect('/site')
 
     if email not in email_to_rsvp:
-        email_to_rsvp[email] = True
-
         props = {
             'day_guest': guest_type == 'day',
             'email': email
@@ -96,9 +104,17 @@ def rsvp():
     else:
         props = {
             'day_guest': guest_type == 'day',
-            'email': email
+            'email': email,
+            'guests': email_to_rsvp[email]
         }
 
         return render_template('existing_rsvp.html', **props)
 
-
+@app.route('/update_rsvp', methods=['POST'])
+def update_rsvp():
+    email = request.cookies.get('email')
+    guests = json.loads(request.form['guests'])
+    email_to_rsvp[email] = guests
+    for guest in guests:
+        print guest
+    return 'OK'

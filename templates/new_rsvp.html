@@ -1,14 +1,85 @@
 <html>
     <head>
         <title>RSVP for Bethan and Edward's Wedding</title>
+        
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <script> 
+            function numGuestsChange() {
+                const numGuests = parseInt(document.getElementById('numGuests').value, 10);
+
+                for (let i = 1; i < 1 + numGuests; i++) {
+                    const elem = document.getElementById(`guest_${i}`).style.display = 'block';
+                }
+                for (let i = numGuests+1; i < 10; i++) {
+                    const elem = document.getElementById(`guest_${i}`).style.display = 'none';
+                }
+            }
+
+            function changeAttend(i) {
+                const isAttending = document.getElementById(`guest_${i}_attending`).value == 'true';
+                document.getElementById(`guest_${i}_has_diet`).value = 'false';
+                document.getElementById(`guest_${i}_diet`).style.display = isAttending ? 'block' : 'none'; 
+                changeDiet(i);
+            }
+
+            function changeDiet(i) {
+                const hasDiet = document.getElementById(`guest_${i}_has_diet`).value == 'true';
+                document.getElementById(`guest_${i}_diet_details_text`).value = '';
+                document.getElementById(`guest_${i}_diet_details`).style.display = hasDiet ? 'block' : 'none'; 
+            }
+
+            function handleSubmit() {
+                let guests = [];
+
+                const numGuests = parseInt(document.getElementById('numGuests').value, 10);
+
+                for (let i = 1; i < 1 + numGuests; i++) {
+                    const guest = {
+                        firstname: document.getElementById(`guest_${i}_firstname`).value.trim(),
+                        lastname: document.getElementById(`guest_${i}_lastname`).value.trim(),
+                        isAttending: document.getElementById(`guest_${i}_attending`).value == 'true',
+                        hasDiet: document.getElementById(`guest_${i}_has_diet`).value == 'true',
+                        dietDetails: document.getElementById(`guest_${i}_diet_details_text`).value.trim(),
+                    };
+
+                    if (guest.firstname == '') {
+                        alert(`Guest ${i} is missing a first name`);
+                        return;
+                    }
+
+                    if (!guest.lastname) {
+                        alert(`Guest ${i} is missing a last name`);
+                        return;
+                    }
+
+                    if (guest.hasDiet && !guest.dietDetails) {
+                        alert(`Guest ${i} is missing diet details`);
+                        return;
+                    }
+
+                    guests.push(guest);
+                }
+
+                console.log(JSON.stringify(guests));
+
+				$.post("/update_rsvp", { guests: JSON.stringify(guests) }, (data) => {
+                    if (data == 'OK') {
+                        location.reload();
+                    }
+				});
+            }
+
+        </script>
+
     </head>
     <body>
         <h1>RSVP for {{ email }}</h1>
 
         Number of guests you'd like to RSVP for:
-        <select>
-            <option value = "1">One</option>
-            <option value = "2" selected>Two</option>
+        <select id='numGuests' onchange='numGuestsChange()'>
+            <option value = "1" selected>One</option>
+            <option value = "2">Two</option>
             <option value = "3">Three</option>
             <option value = "4">Four</option>
             <option value = "5">Five</option>
@@ -18,64 +89,46 @@
             <option value = "9">Nine</option>
         </select> 
 
-        <h2>Guest One (This is <strong>you</strong>)</h2>
-            <p>
-                First Name: <input type="text"/> 
-                Last Name: <input type="text"/> 
-                <a href='#'>(Fill all last names)</a>
-            </p>
-            <p>
-                Is this guest able to attend? 
-                <select>
-                    <option value="true">Yes!</option>
-                    <option value="false">No</option>
-                </select>
-            </p>
-            <p>
-                Does this guest have any dietary requirements? 
-                <select>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-                <a href="#">(See Menu)</a>
-            </p>
-            <p>
-                Please describe dietarty requirements: 
-                <textarea></textarea>
-            </p>
-
-        <h2>Guest Two</h2>
-            <p>
-                First Name: <input type="text"/> 
-                Last Name: <input type="text"/> 
-            </p>
-            <p>
-                Is this guest able to attend? 
-                <select>
-                    <option value="true">Yes!</option>
-                    <option value="false">No</option>
-                </select>
-            </p>
-            <p>
-                Does this guest have any dietary requirements? 
-                <select>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-                <a href="#">(See Menu)</a>
-            </p>
-            <p>
-                Please describe dietarty requirements: 
-                <textarea></textarea>
-            </p>
+        {% for i in range(1,10) %}
+        <div id="guest_{{i}}"  {% if i > 1 %}style='display:none'{% endif %}>
+            <h2>Guest {{i}} {% if i == 1 %}(You!){% endif %}</h2>
+                <div>
+                    First Name: <input id="guest_{{i}}_firstname" type="text"/> 
+                    Last Name: <input id="guest_{{i}}_lastname" type="text"/> 
+                    {% if i == 1 %}
+                    <a href='#'>(Fill all last names)</a>
+                    {% endif %}
+                </div>
+                <div>
+                    Is this guest able to attend? 
+                    <select id="guest_{{i}}_attending" onchange="changeAttend({{i}})">
+                        <option value="true">Yes!</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div id="guest_{{i}}_diet">
+                    <div>
+                    Does this guest have any dietary requirements? 
+                    <select id="guest_{{i}}_has_diet" onchange="changeDiet({{i}})">
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                    <a href="#">(See Menu)</a>
+                    </div>
+                    <div id="guest_{{i}}_diet_details" style="display:none">
+                        Please describe dietarty requirements:<br/> 
+                        <textarea id=guest_{{i}}_diet_details_text></textarea>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
             <p>
-                <a href='#'>Submit!</a>
+                <a href='#' onclick='handleSubmit()'>Submit!</a>
             </p>
 
             <p>
                 <a href='/site'>Back to main site</a>
             </p>
-
     </body>
 </html>

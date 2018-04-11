@@ -16,22 +16,16 @@
 					<td></td>
 					<td></td>
 				</tr>
+                {% for guest in guests %}
 				<tr>
-					<td>Edward</td>
-					<td>Seabrook</td>
-					<td>Yes</td>
-					<td>Needs extra food</td>
+                    <td>{{guest.firstname}}</td>
+                    <td>{{guest.lastname}}</td>
+                    <td>{{guest.isAttending}}</td>
+                    <td>{{guest.dietDetails}}</td>
 					<td><a href='#'>Edit</a></td>
 					<td><a href='#'>Delete</a></td>
 				</tr>
-				<tr>
-					<td>Bethan</td>
-					<td>Philpott</td>
-					<td>Yes</td>
-					<td>None</td>
-					<td><a href='#'>Edit</a></td>
-					<td><a href='#'>Delete</a></td>
-				</tr>
+                {% endfor %}
 			</tbody>
 		</table>
 
