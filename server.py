@@ -92,7 +92,7 @@ def reset():
 @app.route("/site")
 def site():
     guest_type = request.cookies.get('guest_type')
-    email = request.cookies.get('email')
+    email = request.cookies.get('email', '')
     code = request.cookies.get('code', '')
 
     if guest_type is None:
