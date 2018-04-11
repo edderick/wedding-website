@@ -24,13 +24,51 @@
                 
 				$.post("/validate_email", { email }, (data) => {
 					if (data === "success") {
-					   window.location.href = "/rsvp";
+                       document.getElementById('email-entry').style.display = 'none';
+                       document.getElementById('email-confirmation').style.display = 'block';
 					}
 					else {
                         alert("That is probably not a valid email. Please try another");
 					}
 				});
             }
+
+            // TODO: Forgive me for my sins I have just begun
+            function handleKeydown2() {
+                if(event.key === 'Enter') {
+                    handleSubmit2();
+                }
+            }
+
+            // TODO: Forgive me father
+            function handleSubmit2() {
+                const code = document.getElementById('code').value;
+                
+				$.post("/validate_code", { code }, (data) => {
+					if (data === "success") {
+					   window.location.href = "/rsvp";
+					}
+                    else if (data === 'BLOCKED')
+                    {
+                        alert('You have entered the wrong code too many times. ' + 
+                              'Please wait a few hours and try again.')
+                    }
+					else {
+                        console.log(data)
+                        alert("Please enter the code that was sent to your email address");
+					}
+				});
+            }
+
+            function handleSendAgain() {
+                const email = document.getElementById('email').value;
+                
+				$.post("/send_again", { email }, (data) => {
+                    alert('A new email has been sent to ' + email +  
+                          '. Give it a few minutes, if it never turns up: Contact Edward!')
+				});
+            }
+
         </script>
             
 
@@ -43,12 +81,24 @@
                 <h2>Saturday 11th August 2018</h2>
             </div>
             <div class="container">
-                <h2>RSPV</h2>
-                <p>Please let us know if you can attend by Thursday 31st May 2018</p>
-                <p>Your E-Mail: 
-                <input id="email" type="text" onkeydown="handleKeydown()" value='{{ email }}'/> 
-                    <input type="submit" onclick="handleSubmit()" value="&lt;Go&gt;"/>
-                </p>
+                <div id="email-entry">
+                    <h2>RSPV</h2>
+                    <p>Please let us know if you can attend by Thursday 31st May 2018</p>
+                    <p>Your E-Mail: 
+                    <input id="email" type="text" onkeydown="handleKeydown()" value='{{ email }}'/> 
+                        <input type="submit" onclick="handleSubmit()" value="&lt;Go&gt;"/>
+                    </p>
+                </div>
+                <div id="email-confirmation" style="display: none">
+                    <h2>RSPV</h2>
+                    <p>A confirmation code has been sent to your email address, 
+                       please copy and paste it here 
+                       (<a href='#' onclick='handleSendAgain()'>Send Again</a>)</p>
+                    <p>Confirmation code: 
+                    <input id="code" type="text" onkeydown="handleKeydown2()" value='{{ code }}'/> 
+                    <input type="submit" onclick="handleSubmit2()" value="&lt;Go&gt;"/>
+                    </p>
+                </div>
             </div>
             {% if day_guest %}
             <div class="container">
@@ -73,7 +123,7 @@
                     living abroad in the near future, we do not need any physical gifts. Your
                     presence at our day is the most important thing to us. However, if you would
                     like to give a gift, we would be extremely appreciative of any donations
-                    towards our honeymoon or a future house deposit.
+                    towards our honeymoon.
                 </p>
             </div>
         </div>
