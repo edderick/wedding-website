@@ -25,6 +25,7 @@ def send_email_job(to, subject, body):
     server.login(gmail_user, gmail_password)
     server.sendmail(sent_from, to, email_text)
     server.close()
+    print "Email sent: {} - {} - {}".format(to, subject, body)
 
 email_thread_pool = Pool(processes=1)
 
