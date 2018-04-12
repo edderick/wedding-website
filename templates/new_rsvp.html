@@ -119,7 +119,7 @@
                     </select>
                     <a href="#">(See Menu)</a>
                     </div>
-                    <div id="guest_{{loop.index}}_diet_details" {% if guest.hasDiet == 'false' %} style='display: none' {% endif %}>
+                    <div id="guest_{{loop.index}}_diet_details" {% if guest.hasDiet == 'true' %} style='display: block' {% else %}  style='display: none' {% endif %}>
                         Please describe dietarty requirements:<br/> 
                         <textarea id=guest_{{loop.index}}_diet_details_text value='{{guest.dietDetails}}'></textarea>
                     </div>
