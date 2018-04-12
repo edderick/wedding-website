@@ -236,7 +236,7 @@ def rsvp():
             props = {
                 'day_guest': guest_type == 'day',
                 'email': email,
-                'guests': guests + [{} for i in range(len(guests), 10)],
+                'guests': guests + [{} for i in range(len(guests) + 1, 10)],
                 'numGuestsSelected': len(guests)
             }
             return render_template('new_rsvp.html', **props)
