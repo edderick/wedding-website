@@ -253,7 +253,7 @@ def update_rsvp():
     email = request.cookies.get('email')
     guests = json.loads(request.form['guests'])
 
-    if len (guests) > 5:
+    if len (guests) >= 10:
         return 'NOPE'
 
     set_guests(email, guests)
