@@ -94,7 +94,7 @@
         </select> 
 
         {% for guest in guests %}
-        <div id="guest_{{loop.index}}"  {% if loop.index > 1 %}style='display:none'{% endif %}>
+        <div id="guest_{{loop.index}}"  {% if loop.index > numGuestsSelected %}style='display:none'{% endif %}>
             <h2>Guest {{loop.index}} {% if i == 1 %}(You!){% endif %}</h2>
                 <div>
                     First Name: <input id="guest_{{loop.index}}_firstname" type="text" value='{{guest.firstname}}'/> 
