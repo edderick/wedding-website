@@ -19,8 +19,9 @@ def send_email_job(to, subject, body):
     email_text = "From: {}\nTo: {}\nSubject: {}\n\n{}".format(
 	sent_from, ", ".join(to), subject, body)
 
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
+    server.starttls()
     server.login(gmail_user, gmail_password)
     server.sendmail(sent_from, to, email_text)
     server.close()
