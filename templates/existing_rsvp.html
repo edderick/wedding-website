@@ -9,31 +9,29 @@
         <p>You have responded for the following guests:</p>
 
 		<table class="table">
-			<tbody>
-				<tr>
-					<td>First Name</td>
-					<td>Last Name</td>
-					<td>Can Attend?</td>
-					<td>Has Dietary Requirements</td>
-					<td>Diet Details</td>
-				</tr>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Can Attend?</th>
+                <th>Has Dietary Requirements?</th>
+                <th>Dietary Requirement Details</th>
+            </tr>
+            <tbody>
                 {% for guest in guests %}
 				<tr>
                     <td>{{guest.firstname}}</td>
                     <td>{{guest.lastname}}</td>
-                    <td>{{guest.isAttending}}</td>
-                    <td>{{guest.hasDiet}}</td>
+                    <td>{% if guest.isAttending == 'true' %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if guest.hasDiet == 'true' %}Yes{% else %}No{% endif %}</td>
                     <td>{{guest.dietDetails}}</td>
 				</tr>
                 {% endfor %}
-			</tbody>
+            <tbody>
 		</table>
 
-		<a href='?edit=1'>Make changes</a>
- 
-        <p>
-            <a href='/site'>Back to main site</a>
-        </p>
+        <center>
+            <a href='?edit=1'>Make changes</a> | <a href='/site'>Back to main site</a>
+        </center>
 
     </body>
 </html>

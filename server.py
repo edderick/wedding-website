@@ -104,7 +104,7 @@ def index():
 
 @app.route("/validate_password", methods=['POST'])
 def validate_password():
-    password = request.form['password']
+    password = request.form['password'].strip().lower()
 
     if password == 'day':
         response = make_response('success')
@@ -140,7 +140,7 @@ def site():
 @app.route("/validate_email", methods=['POST'])
 def validate_email():
     guest_type = request.cookies.get('guest_type')
-    email = request.form['email']
+    email = request.form['email'].strip().lower()
 
     if guest_type is None:
         return redirect('/')
@@ -158,7 +158,7 @@ def validate_email():
 @app.route("/send_again", methods=['POST'])
 def send_again():
     guest_type = request.cookies.get('guest_type')
-    email = request.form['email']
+    email = request.form['email'].strip().lower()
 
     if guest_type is None:
         return redirect('/')
@@ -183,7 +183,7 @@ def send_again():
 def validate_code():
     guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email')
-    code = request.form['code']
+    code = request.form['code'].strip().lower()
 
     if guest_type is None:
         return redirect('/')
