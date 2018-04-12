@@ -3,57 +3,96 @@ from flask import render_template
 from flask import request
 from flask import make_response
 from flask import abort, redirect, url_for
-import json
-
-from multiprocessing import Pool # Here are the big guns
 
 from random import randint
 from collections import Counter
+from async_email_sender import send_email
 
+import json
 import sqlite3
 
-import smtplib
-
 email_to_rsvp = {}
+
+def set_code(email, code):
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO code VALUES (?, ?)", (email, code))
+    conn.commit()
+
+def get_code(email):
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM code WHERE email=?', (email,))
+
+    record = c.fetchone()
+
+    if record is None:
+        return None
+
+    return record[1]
+
+def set_guests(email, guests):
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+    for guest in guests:
+        c.execute('''INSERT INTO rsvp
+            (firstname, lastname, isAttending, hasDiet, dietDetails, email)
+            VALUES
+            (?, ?, ?, ?, ?, ?)''',
+            (guest['firstname'], guest['lastname'], guest['isAttending'],
+             guest['hasDiet'], guest['dietDetails'], email))
+    conn.commit()
+
+def get_guests(email):
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+
+    guests = []
+
+    for record in c.execute('SELECT * FROM rsvp WHERE email=?', (email,)):
+        guests.append({
+            'firstname': record[0],
+            'lastname': record[1],
+            'isAttending': record[2],
+            'hasDiet': record[3],
+            'dietDetails': record[4]
+        })
+
+    return guests
+
+
+
+# Transient state to prevent abuse
+hit_counter = Counter()
+sent_counter = Counter()
+
+def make_code():
+    return "{}".format(randint(1000, 9999))
+
 
 
 app = Flask(__name__)
 
-def get_password():
-    with open('./password.txt') as f:
-	return f.readline()
-
-def callback(arg):
-    print arg
-
-def send_email(to, subject, body):
-    """
-    to - Array of email addresses
-    subject & body - duh
-    """
-    gmail_user = 'bethan.and.edward.wedding@gmail.com'
-    gmail_password = get_password()
-
-    sent_from = "Bethan & Edward's Wedding"
-
-    email_text = "From: {}\nTo: {}\nSubject: {}\n\n{}".format(
-	sent_from, ", ".join(to), subject, body)
-
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.ehlo()
-    server.login(gmail_user, gmail_password)
-    server.sendmail(sent_from, to, email_text)
-    server.close()
-
-email_thread_pool = Pool(processes=1)
-
 
 @app.route("/init")
 def init():
+    # TODO: This should be a standalone script
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
+    c.execute('CREATE TABLE code (email, code)')
+    c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, email)')
+    conn.commit()
+
     return "Database initialized"
 
+@app.route("/reset")
+def reset():
+    # TODO: Is this needed in production?
+    response = make_response('Your cookie has been cleared')
+    response.set_cookie('guest_type', '',  expires = 0)
+    response.set_cookie('email', '',  expires = 0)
+    response.set_cookie('code', '',  expires = 0)
+    return response
 
 @app.route("/")
 def index():
@@ -82,13 +121,6 @@ def validate_password():
     response.set_cookie('guest_type', '',  expires = 0)
     return response
 
-@app.route("/reset")
-def reset():
-    response = make_response('Your cookie has been cleared')
-    response.set_cookie('guest_type', '',  expires = 0)
-    response.set_cookie('email', '',  expires = 0)
-    return response
-
 @app.route("/site")
 def site():
     guest_type = request.cookies.get('guest_type')
@@ -106,12 +138,6 @@ def site():
 
     return render_template('site.html', **props)
 
-code_map = {}
-hit_counter = Counter()
-
-def make_code():
-    return "{}".format(randint(1000, 9999))
-
 @app.route("/validate_email", methods=['POST'])
 def validate_email():
     guest_type = request.cookies.get('guest_type')
@@ -120,12 +146,11 @@ def validate_email():
     if guest_type is None:
         return redirect('/')
 
-    if email not in code_map:
+    if get_code(email) is None:
         code = make_code()
-        code_map[email] = code
+        set_code(email, code)
 
-        e = ([email], "Your Confirmation Code", 'Your code is: {}'.format(code))
-        email_thread_pool.apply_async(send_email, e, callback=callback)
+        send_email([email], "Your Confirmation Code", "Your code is: {}".format(code))
 
     response = make_response('success')
     response.set_cookie('email', email)
@@ -139,13 +164,18 @@ def send_again():
     if guest_type is None:
         return redirect('/')
 
-    if email not in code_map:
-        code_map[email] = make_code
+    sent_counter[email] += 1
 
-    code = code_map[email]
+    if sent_counter[email] > 3:
+        return 'BLOCKED'
 
-    e = ([email], "Your Confirmation Code", 'Your code is: {}'.format(code))
-    email_thread_pool.apply_async(send_email, e, callback=callback)
+    if get_code(email) is None:
+        code = make_code()
+        set_code(email, code)
+
+    code = get_code(email)
+
+    send_email([email], "Your Confirmation Code", "Your code is: {}".format(code))
 
     response = make_response('success')
     return response
@@ -163,10 +193,9 @@ def validate_code():
         return redirect('/site')
 
     if email in hit_counter and hit_counter[email] > 3:
-        print "BOI"
         return 'BLOCKED'
 
-    if code != code_map[email]:
+    if code != get_code(email):
         hit_counter[email] += 1
         return 'Nope'
 
@@ -187,10 +216,10 @@ def rsvp():
     if email is None:
         return redirect('/site')
 
-    if code != code_map[email]:
+    if code != get_code(email):
         return redirect('/site')
 
-    if email not in email_to_rsvp:
+    if len(get_guests(email)) == 0:
         props = {
             'day_guest': guest_type == 'day',
             'email': email
@@ -202,7 +231,7 @@ def rsvp():
         props = {
             'day_guest': guest_type == 'day',
             'email': email,
-            'guests': email_to_rsvp[email]
+            'guests': get_guests(email)
         }
 
         return render_template('existing_rsvp.html', **props)
@@ -211,14 +240,5 @@ def rsvp():
 def update_rsvp():
     email = request.cookies.get('email')
     guests = json.loads(request.form['guests'])
-    email_to_rsvp[email] = guests
-    for guest in guests:
-        print guest
+    set_guests(email, guests)
     return 'OK'
-
-@app.route('/sendmail')
-def sendmail():
-    email = (['edderick@live.co.uk'], "Cool Subject", 'Cooler body')
-    email_thread_pool.apply_async(send_email, email, callback=callback)
-    return 'Email sent!'
-

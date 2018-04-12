@@ -64,8 +64,15 @@
                 const email = document.getElementById('email').value;
                 
 				$.post("/send_again", { email }, (data) => {
-                    alert('A new email has been sent to ' + email +  
-                          '. Give it a few minutes, if it never turns up: Contact Edward!')
+                    if (data == 'BLOCKED') {
+                        alert('Try again later. You\'re blocked!');
+                    }
+
+                    if (data == 'success')
+                    {
+                        alert('A new email has been sent to ' + email +  
+                              '. Give it a few minutes, if it never turns up: Contact Edward!')
+                    }
 				});
             }
 
