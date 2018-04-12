@@ -11,8 +11,6 @@ from async_email_sender import send_email
 import json
 import sqlite3
 
-email_to_rsvp = {}
-
 def set_code(email, code):
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
