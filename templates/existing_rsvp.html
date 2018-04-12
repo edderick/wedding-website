@@ -12,20 +12,23 @@
 					<td>First Name</td>
 					<td>Last Name</td>
 					<td>Can Attend?</td>
-					<td>Dietary Requirements</td>
+					<td>Has Dietary Requirements</td>
+					<td>Diet Details</td>
 				</tr>
                 {% for guest in guests %}
 				<tr>
                     <td>{{guest.firstname}}</td>
                     <td>{{guest.lastname}}</td>
                     <td>{{guest.isAttending}}</td>
+                    <td>{{guest.isAttending}}</td>
+                    <td>{{guest.hasDiet}}</td>
                     <td>{{guest.dietDetails}}</td>
 				</tr>
                 {% endfor %}
 			</tbody>
 		</table>
 
-		<a href='#'>Make changes</a>
+		<a href='?edit=1'>Make changes</a>
  
         <p>
             <a href='/site'>Back to main site</a>

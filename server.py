@@ -34,6 +34,7 @@ def get_code(email):
 def set_guests(email, guests):
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
+    c.execute('''DELETE FROM rsvp WHERE email=?''', (email,))
     for guest in guests:
         c.execute('''INSERT INTO rsvp
             (firstname, lastname, isAttending, hasDiet, dietDetails, email)
@@ -210,6 +211,8 @@ def rsvp():
     email = request.cookies.get('email')
     code = request.cookies.get('code')
 
+    edit = bool(request.args.get('edit'))
+
     if guest_type is None:
         return redirect('/')
 
@@ -222,19 +225,30 @@ def rsvp():
     if len(get_guests(email)) == 0:
         props = {
             'day_guest': guest_type == 'day',
-            'email': email
+            'email': email,
+            'guests': [{} for i in range(1, 10)],
+            'numGuestsSelected': 1
         }
 
         return render_template('new_rsvp.html', **props)
 
     else:
-        props = {
-            'day_guest': guest_type == 'day',
-            'email': email,
-            'guests': get_guests(email)
-        }
-
-        return render_template('existing_rsvp.html', **props)
+        if edit:
+            guests = get_guests(email)
+            props = {
+                'day_guest': guest_type == 'day',
+                'email': email,
+                'guests': guests + [{} for i in range(len(guests), 10)],
+                'numGuestsSelected': len(guests)
+            }
+            return render_template('new_rsvp.html', **props)
+        else:
+            props = {
+                'day_guest': guest_type == 'day',
+                'email': email,
+                'guests': get_guests(email)
+            }
+            return render_template('existing_rsvp.html', **props)
 
 @app.route('/update_rsvp', methods=['POST'])
 def update_rsvp():
