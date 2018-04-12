@@ -89,7 +89,7 @@
         Number of guests you'd like to RSVP for:
         <select id='numGuests' onchange='numGuestsChange()'>
             {% for i in range(1, 10) %}
-            <option value="{{i}}" {% if i == numGuestsSeldiected %} selected {% endif %}>{{i}}</option>
+            <option value="{{i}}" {% if i == numGuestsSelected %} selected {% endif %}>{{i}}</option>
             {% endfor %}
         </select> 
 
