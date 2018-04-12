@@ -83,6 +83,12 @@
                 }
             }
 
+            function gotoMainSite() {
+                const proceed = confirm("If you have any unsaved changes, they will be lost")
+                if (proceed) {
+                    window.location.href = '/site';
+                }
+            }
         </script>
 
     </head>
@@ -135,7 +141,7 @@
             </p>
 
             <p>
-                <a href='/site'>Back to main site</a>
+                <a href='#' onclick='gotoMainSite()'>Back to main site</a>
             </p>
     </body>
 </html>
