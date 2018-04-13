@@ -4,16 +4,38 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <title>Edward and Bethan's Wedding</title>
+
+        <link rel="stylesheet" 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
+              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
+              crossorigin="anonymous">
+
+        <style>
+            .transparent{
+                  background:rgba(166,192,197,0.6);
+                  padding-top:3vh;
+                  padding-bottom:2vh;
+                  margin-bottom:2vh;
+            }
+           
+            .scaled-image {
+                width:50%
+            }
+
+            .scaled-panorama {
+                width:100%
+            }
+
+        </style>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <script>
-
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             function handleKeydown() {
-                if(event.key === 'Enter') {
+                if (event.key === 'Enter') {
                     handleSubmit();
                 }
             }
@@ -79,63 +101,116 @@
                     }
 				});
             }
-
         </script>
-            
-
-        <title>Edward and Bethan's Wedding</title>
     </head>
     <body>
+
+        <!-- Had to put it here to get it to work! -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
         <div class="text-center">
-            <div class="container">
-                <h1>Edward &amp; Bethan's Wedding</h1>
-                <h2>Saturday 11th August 2018</h2>
+
+            <div class="transparent">
+                <div class="container">
+                    <h1>Edward &amp; Bethan's Wedding</h1>
+                    <h2>Saturday 11th August 2018</h2>
+                </div>
             </div>
-            <div class="container">
+
+            <div class="alert alert-danger" role="alert">
                 <div id="email-entry">
                     <h2>RSPV</h2>
-                    <p>Please let us know if you can attend by Thursday 31st May 2018</p>
-                    <p>Your E-Mail: 
-                    <input id="email" type="text" onkeydown="handleKeydown()" value='{{ email }}'/> 
-                        <input type="submit" onclick="handleSubmit()" value="&lt;Go&gt;"/>
-                    </p>
+                    <p>Please let us know if you can attend by <strong>Thursday 31st May 2018</strong></p>
+                    
+                    <form id='form' class='form-inline justify-content-center' action="javascript:void()">
+                        <div class="form-group">
+                            <label >Your e-mail</label>
+                            <input id="email" type="text" onkeydown="handleKeydown()" 
+                                   class='form-control ml-2 mr-2' value='{{ email }}'/> 
+                            <button onclick="handleSubmit()" class='btn btn-primary'>&lt;Go&gt;</button>
+                        </div>
+                    </form>
                 </div>
                 <div id="email-confirmation" style="display: none">
                     <h2>RSPV</h2>
                     <p>A confirmation code has been sent to your email address, 
                        please copy and paste it here 
                        (<a href='#' onclick='handleSendAgain()'>Send Again</a>)</p>
-                    <p>Confirmation code: 
-                    <input id="code" type="text" onkeydown="handleKeydown2()" value='{{ code }}'/> 
-                    <input type="submit" onclick="handleSubmit2()" value="&lt;Go&gt;"/>
-                    </p>
+                    <form id='form' class='form-inline justify-content-center' action="javascript:void()">
+                        <div class="form-group">
+                            <label>Confirmation code</label>
+                            <input id="code" type="text" onkeydown="handleKeydown2()" 
+                                   class='form-control ml-2 mr-2' value='{{ code }}'/> 
+                            <button onclick="handleSubmit2()" class='btn btn-primary'>&lt;Go&gt;</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+
             {% if day_guest %}
-            <div class="container">
-                <h2>Ceremony</h2>
-                    <h3>St Phillip's Church, Maidstone</h3>
-                    <p>Arrive at 12:30 to be seated by 12:45</p>
+            <div class="transparent">
+                <div class="container">
+                    <h2>Ceremony</h2>
+                    <h4>St Philip's Church, Maidstone</h4>
+                    <p>Arrive at <strong>12:30</strong> to be seated by <strong>12:45</strong></p>
+                    <div>
+                        <img src='static/images/st_phillips.JPG' class='rounded scaled-image mb-2' />
+                    </div>
+                    <button class="btn btn-info btn-lg mb-2" type="button" data-toggle="collapse" data-target="#churchCollapse" aria-expanded="false" aria-controls="churchCollapse">
+                        Show More
+                    </button>
+                    <div class="collapse" id="churchCollapse">
+                        <div class="card card-body">
+                            <p>The wedding ceremony will take place in St Philip's
+                            church in Maidstone. We have a deep personal connection to
+                            this church as it is the church in which Bethan was
+                            christened.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% endif %}
-            <div class="container">
-                <h2>Reception</h2>
-                    <h3>Windy Ridge, Offham</h3>
-                    {% if day_guest %}
-                    <p>15:00 till Late</p>
-                    {% else %}
-                    <p>19:30 till Late</p>
-                    {% endif %}
+
+            <div class="transparent">
+                <div class="container">
+                    <h2>Reception</h2>
+                    <h4>Windyridge, Offham</h4>
+                        {% if day_guest %}
+                        <p><strong>15:00</strong> till Late</p>
+                        {% else %}
+                        <p><strong>19:30</strong> till Late</p>
+                        {% endif %}
+                    <div>
+                        <img src='static/images/windyridge.png' class='rounded scaled-panorama mb-2' />
+                    </div>
+                    <button class="btn btn-info btn-lg mb-2" type="button" data-toggle="collapse" data-target="#receptionCollapse" aria-expanded="false" aria-controls="receptionCollapse">
+                        Show More
+                    </button>
+                    <div class="collapse" id="receptionCollapse">
+                        <div class="card card-body">
+                            <p>Our reception will take place at Edd's Grandma's
+                            garden in Offham, West Malling. We will be
+                            providing some transport from the church to the
+                            field so please let us know in the RSVP if you will
+                            be using this. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="container">
-                <h2>Gifts</h2>
-                <p>
-                    As we have lived together for 2 years and are planning on
-                    living abroad in the near future, we do not need any physical gifts. Your
-                    presence at our day is the most important thing to us. However, if you would
-                    like to give a gift, we would be extremely appreciative of any donations
-                    towards our honeymoon.
-                </p>
+
+            <div class="transparent">
+                <div class="container">
+                    <h2>Gifts</h2>
+                    <p>
+                        As we have lived together for 2 years and are planning on
+                        living abroad in the near future, we do not need any physical gifts. Your
+                        presence at our day is the most important thing to us. However, if you would
+                        like to give a gift, we would be extremely appreciative of any donations
+                        towards our honeymoon.
+                    </p>
+                </div>
             </div>
         </div>
     </body>
