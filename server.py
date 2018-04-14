@@ -11,6 +11,8 @@ from async_email_sender import send_email
 import json
 import sqlite3
 
+# TODO Extract DbAccess class
+
 def set_code(email, code):
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
@@ -59,7 +61,17 @@ def get_guests(email):
 
     return guests
 
+def get_guest_type_for_password(password):
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+    c.execute('SELECT guest_type FROM password WHERE password=?', (password,))
 
+    record = c.fetchone()
+
+    if record is None:
+        return None
+
+    return record[0]
 
 # Transient state to prevent abuse
 hit_counter = Counter()
@@ -67,7 +79,6 @@ sent_counter = Counter()
 
 def make_code():
     return "{}".format(randint(1000, 9999))
-
 
 
 app = Flask(__name__)
@@ -78,8 +89,25 @@ def init():
     # TODO: This should be a standalone script
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
-    c.execute('CREATE TABLE code (email, code)')
-    c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, email)')
+
+    try:
+        c.execute('CREATE TABLE code (email, code)')
+    except:
+        pass
+
+    try:
+        c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, email)')
+    except:
+        pass
+
+    try:
+        c.execute('CREATE TABLE password (password, guest_type)')
+    except:
+        pass
+
+    # INSERT INTO password vlaues ("day", "day")
+    # INSERT INTO password vlaues ("evening", "evening")
+
     conn.commit()
 
     return "Database initialized"
@@ -106,19 +134,18 @@ def index():
 def validate_password():
     password = request.form['password'].strip().lower()
 
-    if password == 'day':
-        response = make_response('success')
-        response.set_cookie('guest_type', 'day')
+    guest_type = get_guest_type_for_password(password)
+
+    if guest_type is None:
+        response = make_response('error')
+        response.set_cookie('guest_type', '',  expires = 0)
         return response
 
-    elif password == 'evening':
-        response = make_response('success')
-        response.set_cookie('guest_type', 'evening')
-        return response
-
-    response = make_response('error')
-    response.set_cookie('guest_type', '',  expires = 0)
+    response = make_response('success')
+    response.set_cookie('guest_type', guest_type)
     return response
+
+
 
 @app.route("/site")
 def site():
@@ -264,7 +291,19 @@ def rsvp():
 
 @app.route('/update_rsvp', methods=['POST'])
 def update_rsvp():
+    guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email')
+    code = request.cookies.get('code')
+
+    if guest_type is None:
+        return redirect('/')
+
+    if email is None:
+        return redirect('/site')
+
+    if code != get_code(email):
+        return redirect('/site')
+
     guests = json.loads(request.form['guests'])
 
     if len (guests) >= 10:
