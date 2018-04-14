@@ -26,14 +26,14 @@
             }
 
             function changeAttend(i) {
-                const isAttending = document.getElementById(`guest_${i}_attending`).value == 'true';
+                const isAttending = document.getElementById(`guest_${i}_attending`).checked;
                 document.getElementById(`guest_${i}_has_diet`).value = 'false';
                 document.getElementById(`guest_${i}_diet`).style.display = isAttending ? 'block' : 'none'; 
                 changeDiet(i);
             }
 
             function changeDiet(i) {
-                const hasDiet = document.getElementById(`guest_${i}_has_diet`).value == 'true';
+                const hasDiet = document.getElementById(`guest_${i}_has_diet`).checked;
                 document.getElementById(`guest_${i}_diet_details_text`).value = '';
                 document.getElementById(`guest_${i}_diet_details`).style.display = hasDiet ? 'block' : 'none'; 
             }
@@ -47,8 +47,8 @@
                     const guest = {
                         firstname: document.getElementById(`guest_${i}_firstname`).value.trim(),
                         lastname: document.getElementById(`guest_${i}_lastname`).value.trim(),
-                        isAttending: document.getElementById(`guest_${i}_attending`).value,
-                        hasDiet: document.getElementById(`guest_${i}_has_diet`).value,
+                        isAttending: document.getElementById(`guest_${i}_attending`).checked ? 'true' : 'false',
+                        hasDiet: document.getElementById(`guest_${i}_has_diet`).checked ? 'true' : 'false',
                         dietDetails: document.getElementById(`guest_${i}_diet_details_text`).value.trim(),
                     };
 
@@ -100,10 +100,11 @@
 
     </head>
     <body>
+        <div class='container'>
         <h1>RSVP for {{ email }}</h1>
 
         Number of guests you'd like to RSVP for:
-        <select id='numGuests' onchange='numGuestsChange()'>
+        <select id='numGuests' onchange='numGuestsChange()' style='width: 100px'>
             {% for i in range(1, 10) %}
             <option value="{{i}}" {% if i == numGuestsSelected %} selected {% endif %}>{{i}}</option>
             {% endfor %}
@@ -112,43 +113,58 @@
         {% for guest in guests %}
         <div id="guest_{{loop.index}}"  {% if loop.index > numGuestsSelected %}style='display:none'{% endif %}>
             <h2>Guest {{loop.index}} {% if i == 1 %}(You!){% endif %}</h2>
-                <div>
-                    First Name: <input id="guest_{{loop.index}}_firstname" type="text" value='{{guest.firstname}}'/> 
-                    Last Name: <input id="guest_{{loop.index}}_lastname" type="text" value='{{guest.lastname}}'/> 
-                    {% if loop.index == 1 %}
-                    <a href='#' onclick='fillLastNames({{loop.index}})'>(Fill all last names)</a>
-                    {% endif %}
-                </div>
-                <div>
-                    Is this guest able to attend? 
-                    <select id="guest_{{loop.index}}_attending" onchange="changeAttend({{loop.index}})">
-                        <option value="true" {% if guest.isAttending == 'true'%} selected {% endif %}>Yes!</option>
-                        <option value="false" {% if guest.isAttending == 'false'%} selected {% endif %} >No</option>
-                    </select>
-                </div>
-                <div id="guest_{{loop.index}}_diet" {% if guest.isAttending == 'false' %} style='display: none' {% endif %}>
-                    <div>
-                    Does this guest have any dietary requirements? 
-                    <select id="guest_{{loop.index}}_has_diet" onchange="changeDiet({{loop.index}})">
-                        <option value="false" {% if guest.hasDiet == 'false'%} selected {% endif %} >No</option>
-                        <option value="true" {% if guest.hasDiet == 'true'%} selected {% endif %}>Yes</option>
-                    </select>
-                    <a href="#">(See Menu)</a>
+            <form action="javascript:void()" class='ml-2'>
+                
+                <div class='form-row'>
+                    <div class='form-group col-md-6'>
+                        <label>First Name</label>
+                        <input id="guest_{{loop.index}}_firstname" type="text" value='{{guest.firstname}}' class='form-control'/> 
                     </div>
-                    <div id="guest_{{loop.index}}_diet_details" {% if guest.hasDiet == 'true' %} style='display: block' {% else %}  style='display: none' {% endif %}>
+                    <div class='form-group col-md-6'>
+                        <label>
+                            Last Name
+                            {% if loop.index == 1 %}
+                                <a href='#' onclick='fillLastNames({{loop.index}})'>(Fill all last names)</a>
+                            {% endif %}
+                        </label>
+                        <input id="guest_{{loop.index}}_lastname" type="text" value='{{guest.lastname}}' class='form-control'/> 
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="form-check">
+                        <input id="guest_{{loop.index}}_attending" onchange="changeAttend({{loop.index}})"  class="form-check-input" type="checkbox" {% if guest.isAttending == 'true'%} checked {% endif %}>
+                        <label class="form-check-label" for="guest_{{loop.index}}_attending">
+                            Guest will be attending 
+                        </label>
+                    </div>
+                </div>
+
+                <div  id="guest_{{loop.index}}_diet" {% if guest.isAttending == 'false' %} style='display: none' {% endif %}>
+
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input id="guest_{{loop.index}}_has_diet" onchange="changeDiet({{loop.index}})"  class="form-check-input" type="checkbox" {% if guest.hasDiet == 'true'%} checked {% endif %}>
+                            <label class="form-check-label" for="guest_{{loop.index}}_has_diet">
+                                Guest has special dietary requirements <a href="#">(See Menu)</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class='form-row' id="guest_{{loop.index}}_diet_details" {% if guest.hasDiet == 'true' %} style='display: block' {% else %}  style='display: none' {% endif %}>
                         Please describe dietarty requirements:<br/> 
-                        <textarea id=guest_{{loop.index}}_diet_details_text>{{guest.dietDetails}}</textarea>
+                        <textarea id='guest_{{loop.index}}_diet_details_text' class="form-control" rows='3' >{{guest.dietDetails}}</textarea>
                     </div>
+                
                 </div>
+            </form>
             </div>
             {% endfor %}
 
-            <p>
-                <a href='#' onclick='handleSubmit()'>Submit!</a>
-            </p>
-
-            <p>
-                <a href='#' onclick='gotoMainSite()'>Back to main site</a>
-            </p>
+            <center>
+                <a href='#' onclick='handleSubmit()'>Save Changes</a> | <a href='#' onclick='gotoMainSite()'>Back to Main Site</a>
+            </center>
+        </div>
     </body>
 </html>
