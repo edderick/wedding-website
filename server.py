@@ -145,6 +145,9 @@ def validate_email():
     if guest_type is None:
         return redirect('/')
 
+    if "@" not in email:
+        return 'error'
+
     if get_code(email) is None:
         code = make_code()
         set_code(email, code)
