@@ -141,12 +141,22 @@ def site():
 def validate_email():
     guest_type = request.cookies.get('guest_type')
     email = request.form['email'].strip().lower()
+    code = request.cookies.get('code', '')
 
     if guest_type is None:
         return redirect('/')
 
     if "@" not in email:
         return 'error'
+
+    if code != '':
+        if email in hit_counter and hit_counter[email] > 3:
+            return 'BLOCKED'
+
+        if code == get_code(email):
+            return 'rsvp'
+        else:
+            hit_counter[email] += 1
 
     if get_code(email) is None:
         code = make_code()
@@ -156,6 +166,7 @@ def validate_email():
 
     response = make_response('success')
     response.set_cookie('email', email)
+    response.set_cookie('code', '',  expires = 0)
     return response
 
 @app.route("/send_again", methods=['POST'])
