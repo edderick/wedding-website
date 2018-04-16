@@ -6,9 +6,9 @@
 
         <title>Edward and Bethan's Wedding</title>
 
-        <link rel="stylesheet" 
-              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
-              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
               crossorigin="anonymous">
 
         <style>
@@ -18,7 +18,7 @@
                   padding-bottom:2vh;
                   margin-bottom:2vh;
             }
-           
+
             .scaled-image {
                 width:50%
             }
@@ -41,7 +41,7 @@
                     alert("That is probably not a valid email. Please try another");
                     return;
                 }
-                
+
                 document.getElementById('email').disabled = true;
                 document.getElementById('email-button').disabled = true;
 
@@ -62,14 +62,14 @@
 
             function handleSubmit2() {
                 const code = document.getElementById('code').value;
-                
+
 				$.post("/validate_code", { code }, (data) => {
 					if (data === "success") {
 					   window.location.href = "/rsvp";
 					}
                     else if (data === 'BLOCKED')
                     {
-                        alert('You have entered the wrong code too many times. ' + 
+                        alert('You have entered the wrong code too many times. ' +
                               'Please wait a few hours and try again.')
                     }
 					else {
@@ -81,7 +81,7 @@
 
             function handleSendAgain() {
                 const email = document.getElementById('email').value;
-                
+
 				$.post("/send_again", { email }, (data) => {
                     if (data == 'BLOCKED') {
                         alert('Try again later. You\'re blocked!');
@@ -89,7 +89,7 @@
 
                     if (data == 'success')
                     {
-                        alert('A new email has been sent to ' + email +  
+                        alert('A new email has been sent to ' + email +
                               '. Give it a few minutes, if it never turns up: Contact Edward!')
                     }
 				});
@@ -115,24 +115,24 @@
                 <div id="email-entry">
                     <h2>RSVP</h2>
                     <p>Please let us know if you can attend by <strong>Thursday 31st May 2018</strong></p>
-                    
+
                     <form id='form' class='form-inline justify-content-center' action="javascript:void()">
                         <div class="form-group">
                             <label >Your e-mail</label>
-                            <input id="email" type="email" class='form-control ml-2 mr-2' value='{{ email }}'/> 
+                            <input id="email" type="email" class='form-control ml-2 mr-2' value='{{ email }}'/>
                             <button id="email-button"onclick="handleSubmit()" class='btn btn-primary'>&lt;Go&gt;</button>
                         </div>
                     </form>
                 </div>
                 <div id="email-confirmation" style="display: none">
                     <h2>RSVP</h2>
-                    <p>A confirmation code has been sent to your email address, 
-                       please copy and paste it here 
+                    <p>A confirmation code has been sent to your email address,
+                       please copy and paste it here
                        (<a href='#' onclick='handleSendAgain()'>Send Again</a>)</p>
                     <form id='form' class='form-inline justify-content-center' action="javascript:void()">
                         <div class="form-group">
                             <label>Confirmation code</label>
-                            <input id="code" type="text" class='form-control ml-2 mr-2' value='{{ code }}'/> 
+                            <input id="code" type="text" class='form-control ml-2 mr-2' value='{{ code }}'/>
                             <button onclick="handleSubmit2()" class='btn btn-primary'>&lt;Go&gt;</button>
                         </div>
                     </form>
@@ -153,10 +153,16 @@
                     </button>
                     <div class="collapse" id="churchCollapse">
                         <div class="card card-body">
-                            <p>The wedding ceremony will take place in St Philip's
-                            church in Maidstone. We have a deep personal connection to
-                            this church as it is the church in which Bethan was
-                            christened.</p>
+                            <div class='container justify-content-center'>
+                                <div class='row justify-content-left text-left'>
+                                    <p>The wedding ceremony will take place in St Philip's
+                                    church in Maidstone. We have a deep personal connection to
+                                    this church as it is the church in which Bethan was
+                                    christened.</p>
+                                </div>
+                                <iframe width="600" height="450" frameborder="0" style="border:0"
+                                    src="https://www.google.com/maps/embed/v1/place?q=st%20philips%20church%20maidstone&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA" allowfullscreen></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,9 +174,9 @@
                     <h2>Reception</h2>
                     <h4>Windyridge, Offham</h4>
                         {% if day_guest %}
-                        <p><strong>15:00</strong> till Late</p>
+                        <p><strong>15:00</strong> till <strong>midnight</strong></p>
                         {% else %}
-                        <p><strong>19:30</strong> till Late</p>
+                        <p><strong>19:30</strong> till <strong>midnight</strong></p>
                         {% endif %}
                     <div>
                         <img src='static/images/windyridge.png' class='rounded scaled-panorama mb-2' />
@@ -179,13 +185,19 @@
                         Show More
                     </button>
                     <div class="collapse" id="receptionCollapse">
-                        <div class="card card-body">
-                            <p>Our reception will take place at Edd's Grandma's
-                            garden in Offham, West Malling. We will be
-                            providing some transport from the church to the
-                            field so please let us know in the RSVP if you will
-                            be using this. 
-                            </p>
+                        <div class="card card-body ">
+                            <div class='container justify-content-center'>
+                                <div class='row justify-content-left text-left'>
+                                    <p>Our reception will take place at Edd's Grandma's
+                                    garden in Offham, West Malling. We will be
+                                    providing some transport from the church to the
+                                    field so please let us know in the RSVP if you will
+                                    be using this.
+                                    </p>
+                                </div>
+                                <iframe width="600" height="450" frameborder="0" style="border:0"
+                                        src="https://www.google.com/maps/embed/v1/place?q=51.288914%2C%200.376690&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA" allowfullscreen></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
