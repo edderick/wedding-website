@@ -11,12 +11,90 @@
               integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
               crossorigin="anonymous">
 
+        <link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Kaushan+Script" rel="stylesheet">
+
         <style>
+
+    <style>
+            .parallax {
+                /* The image used */
+                background-image: url("img_parallax.jpg");
+
+                /* Set a specific height */
+                min-height: 500px;
+
+            }
+
+            header {
+                  padding: 0vh 0 10vh;
+
+            }
+
+            @media (min-width: 992px) {
+                  header {
+                        padding: 0vh 0 50vh;
+                  }
+            }
+
+            .rsvp {
+                margin: 0vh 0 20vh;
+                background:rgba(255,80,80,0.5);
+                padding: 4px 0 17px;
+            }
+
+            .title {
+                font-family: 'Kaushan Script', cursive;
+                font-size: 72px;
+                text-shadow: 4px 4px 4px #030303;
+            }
+
+            .subtitle {
+                font-family: 'Cutive Mono', monospace;
+                font-size: 48px;
+                text-shadow: 1px 1px 0px #030303;
+            }
+
+            section {
+                  padding: 150px 0;
+            }
+
+            body {
+                background-image: url("static/images/wood_background.jpg");
+
+                /* Create the parallax scrolling effect */
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .bg-image {
+                /* The image used */
+                background: red;
+                background-image: url("static/images/selfie.png");
+
+                /* Full height */
+                height: 100%;
+
+                /* Create the parallax scrolling effect */
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
             .transparent{
-                  background:rgba(166,192,197,0.6);
-                  padding-top:3vh;
+                  background:rgba(166,201,201, 1);
+                  padding-top:2vh;
                   padding-bottom:2vh;
-                  margin-bottom:2vh;
+                  margin-bottom:3vh;
+            }
+
+            footer{
+                  background:rgba(244,60,60, 0.90);
+                  padding-top:5px;
+                  padding-bottom:1px;
+                  margin-bottom:0vh;
             }
 
             .scaled-image {
@@ -104,14 +182,8 @@
 
         <div class="text-center">
 
-            <div class="transparent">
-                <div class="container">
-                    <h1>Edward &amp; Bethan's Wedding</h1>
-                    <h2>Saturday 11th August 2018</h2>
-                </div>
-            </div>
-
-            <div class="alert alert-danger" role="alert">
+            <header class="bg-image text-white">
+            <div class="rsvp" role="alert">
                 <div id="email-entry">
                     <h2>RSVP</h2>
                     <p>Please let us know if you can attend by <strong>Thursday 31st May 2018</strong></p>
@@ -137,7 +209,14 @@
                         </div>
                     </form>
                 </div>
+
             </div>
+                <div class="container">
+                    <h1 class='title'>Bethan &amp; Edward's Wedding</h1>
+                    <h2 class='subtitle'>Saturday 11th August 2018</h2>
+                </div>
+
+            </header>
 
             {% if day_guest %}
             <div class="transparent">
@@ -205,6 +284,23 @@
 
             <div class="transparent">
                 <div class="container">
+                    <h2>Schedule</h2>
+                    <p>The day will go as follows</p>
+                </div>
+            </div>
+
+            <div class="transparent">
+                <div class="container">
+                    <h2>Menu</h2>
+                    <h3>Wedding Breakfast</h3>
+                    <p>BBQ</p>
+                    <h3>Evening</h3>
+                    <p>Pizza van</p>
+                </div>
+            </div>
+
+            <div class="transparent">
+                <div class="container">
                     <h2>Gifts</h2>
                     <p>
                         As we have lived together for 2 years and are planning on
@@ -215,6 +311,22 @@
                     </p>
                 </div>
             </div>
+
+            <div class="transparent">
+                <div class="container">
+                    <h2>Accomodation</h2>
+                    <p>You can stay in a hotel</p>
+                </div>
+            </div>
+
+            <div class="transparent">
+                <div class="container">
+                    <h2>Taxis</h2>
+                    <p>You can book a cab</p>
+                </div>
+            </div>
+
+            <footer><p>Edward: 07592602234 | Bethan: 07910499619<p></footer>
         </div>
     </body>
 </html>
