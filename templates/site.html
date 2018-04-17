@@ -58,16 +58,6 @@
                   padding: 150px 0;
             }
 
-            body {
-                background-image: url("static/images/wood_background.jpg");
-
-                /* Create the parallax scrolling effect */
-                background-attachment: fixed;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: cover;
-            }
-
             .bg-image {
                 /* The image used */
                 background: red;
@@ -83,11 +73,18 @@
                 background-size: cover;
             }
 
-            .transparent{
+            .light{
                   background:rgba(166,201,201, 1);
                   padding-top:2vh;
                   padding-bottom:2vh;
-                  margin-bottom:3vh;
+                  margin-bottom:0vh;
+            }
+
+            .dark{
+                  background:rgba(145,180,180, 1);
+                  padding-top:2vh;
+                  padding-bottom:2vh;
+                  margin-bottom:0vh;
             }
 
             footer{
@@ -219,7 +216,7 @@
             </header>
 
             {% if day_guest %}
-            <div class="transparent">
+            <div class="light">
                 <div class="container">
                     <h2>Ceremony</h2>
                     <h4>St Philip's Church, Maidstone</h4>
@@ -248,7 +245,7 @@
             </div>
             {% endif %}
 
-            <div class="transparent">
+            <div class="dark">
                 <div class="container">
                     <h2>Reception</h2>
                     <h4>Windyridge, Offham</h4>
@@ -282,14 +279,14 @@
                 </div>
             </div>
 
-            <div class="transparent">
+            <div class="light">
                 <div class="container">
                     <h2>Schedule</h2>
                     <p>The day will go as follows</p>
                 </div>
             </div>
 
-            <div class="transparent">
+            <div class="dark">
                 <div class="container">
                     <h2>Menu</h2>
                     <h3>Wedding Breakfast</h3>
@@ -299,7 +296,7 @@
                 </div>
             </div>
 
-            <div class="transparent">
+            <div class="light">
                 <div class="container">
                     <h2>Gifts</h2>
                     <p>
@@ -312,14 +309,14 @@
                 </div>
             </div>
 
-            <div class="transparent">
+            <div class="dark">
                 <div class="container">
                     <h2>Accomodation</h2>
                     <p>You can stay in a hotel</p>
                 </div>
             </div>
 
-            <div class="transparent">
+            <div class="light">
                 <div class="container">
                     <h2>Taxis</h2>
                     <p>You can book a cab</p>
