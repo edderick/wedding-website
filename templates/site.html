@@ -9,13 +9,12 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
               integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-              crossorigin="anonymous">
+              crossorigin="anonymous" />
 
-        <link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Kaushan+Script" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Kaushan+Script"
+              rel="stylesheet" />
 
         <style>
-
-    <style>
             header {
                   padding: 0vh 0 10vh;
             }
@@ -28,7 +27,7 @@
 
             .rsvp {
                 margin: 0vh 0 20vh;
-                background:rgba(255,80,80,0.5);
+                background:rgba(165, 0, 0,0.8);
                 padding: 4px 0 17px;
             }
 
@@ -63,21 +62,21 @@
                 background-size: cover;
             }
 
-            .light{
-                  background:rgba(166,201,201, 1);
+            .light {
+                  background:rgba(148,201,201, 1);
                   padding-top:2vh;
                   padding-bottom:2vh;
                   margin-bottom:0vh;
             }
 
-            .dark{
+            .dark {
                   background:rgba(145,180,180, 1);
                   padding-top:2vh;
                   padding-bottom:2vh;
                   margin-bottom:0vh;
             }
 
-            footer{
+            footer {
                   background:rgba(244,60,60, 0.90);
                   padding-top:5px;
                   padding-bottom:1px;
@@ -91,7 +90,6 @@
             .scaled-panorama {
                 width:100%
             }
-
         </style>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -172,13 +170,12 @@
             <header class="bg-image text-white">
             <div class="rsvp" role="alert">
                 <div id="email-entry">
-                    <h2>RSVP</h2>
+                    <h2><strong>RSVP</strong></h2>
                     <p>Please let us know if you can attend by <strong>Thursday 31st May 2018</strong></p>
 
                     <form id='form' class='form-inline justify-content-center' action="javascript:void()">
                         <div class="form-group">
-                            <label >Your e-mail</label>
-                            <input id="email" type="email" class='form-control ml-2 mr-2' value='{{ email }}'/>
+                            <input id="email" type="email" class='form-control ml-2 mr-2' placeholder="Your email address" value='{{ email }}'/>
                             <button id="email-button"onclick="handleSubmit()" class='btn btn-primary'>&lt;Go&gt;</button>
                         </div>
                     </form>
