@@ -19,17 +19,23 @@
                   padding: 0vh 0 10vh;
             }
 
-            @media (min-width: 992px) {
+            .rsvp {
+                margin: 0vh 0 10vh;
+                background:rgba(0, 0, 0,0.8);
+                padding: 4px 0 17px;
+            }
+
+            @media (min-width: 762px) {
                   header {
-                        padding: 0vh 0 50vh;
+                        padding: 0vh 0 40vh;
+                  }
+
+                  .rsvp {
+                        margin: 0vh 0 30vh;
+                        padding: 4px 0 17px;
                   }
             }
 
-            .rsvp {
-                margin: 0vh 0 20vh;
-                background:rgba(165, 0, 0,0.8);
-                padding: 4px 0 17px;
-            }
 
             .title {
                 font-family: 'Kaushan Script', cursive;
@@ -62,29 +68,37 @@
                 background-size: cover;
             }
 
+            .white {
+                  background:rgba(255,255, 255, 0.90);
+                  padding-top:1vh;
+                  padding-bottom:0vh;
+                  margin-top:0vh;
+                  margin-bottom:0.5em;
+            }
+
             .light {
-                  background:rgba(148,201,201, 1);
-                  padding-top:2vh;
-                  padding-bottom:2vh;
+                  background:rgba(130,170, 170, 1);
+                  padding-top:0.5vh;
+                  padding-bottom:0.5vh;
                   margin-bottom:0vh;
             }
 
             .dark {
-                  background:rgba(145,180,180, 1);
+                  background:rgba(241,234,220, 1);
                   padding-top:2vh;
                   padding-bottom:2vh;
                   margin-bottom:0vh;
             }
 
             footer {
-                  background:rgba(244,60,60, 0.90);
-                  padding-top:5px;
-                  padding-bottom:1px;
+                  background:rgba(0, 0, 0, 0.80);
+                  padding-top:0.5vh;
+                  padding-bottom:0.5vh;
                   margin-bottom:0vh;
             }
 
             .scaled-image {
-                width:50%
+                width:100%
             }
 
             .scaled-panorama {
@@ -162,13 +176,17 @@
     <body>
 
         <!-- Had to put it here to get it to work! -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+                integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+                integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+                crossorigin="anonymous"></script>
 
-        <div class="text-center">
+        <header class="bg-image text-white ">
 
-            <header class="bg-image text-white">
-            <div class="rsvp" role="alert">
+            <div class="rsvp text-center" role="alert">
+
                 <div id="email-entry">
                     <h2><strong>RSVP</strong></h2>
                     <p>Please let us know if you can attend by <strong>Thursday 31st May 2018</strong></p>
@@ -180,6 +198,7 @@
                         </div>
                     </form>
                 </div>
+
                 <div id="email-confirmation" style="display: none">
                     <h2>RSVP</h2>
                     <p>A confirmation code has been sent to your email address,
@@ -195,97 +214,216 @@
                 </div>
 
             </div>
-                <div class="container">
-                    <h1 class='title'>Bethan &amp; Edward's Wedding</h1>
-                    <h2 class='subtitle'>Saturday 11th August 2018</h2>
-                </div>
 
-            </header>
+            <div class="container text-center">
+                <h1 class='title'>Bethan &amp; Edward's Wedding</h1>
+                <h2 class='subtitle'>Saturday 11th August 2018</h2>
+            </div>
 
-            {% if day_guest %}
-            <div class="light">
-                <div class="container">
-                    <h2>Ceremony</h2>
-                    <h4>St Philip's Church, Maidstone</h4>
-                    <p>Arrive at <strong>12:30</strong> to be seated by <strong>12:45</strong></p>
-                    <div>
-                        <img src='static/images/st_phillips.JPG' class='rounded scaled-image mb-2' />
+        </header>
+
+        {% if day_guest %}
+        <div class="light">
+            <div class="container text-center">
+                <h2>Ceremony</h2>
+            </div>
+        </div>
+        <div class="dark">
+            <div class="container text-center">
+                <h4>St Philip's Church, Maidstone</h4>
+                <p>Arrive at <strong>12:30</strong> to be seated by <strong>12:45</strong></p>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <img src='static/images/st_phillips.JPG' class='scaled-image mb-2' />
                     </div>
-                    <button class="btn btn-info btn-lg mb-2" type="button" data-toggle="collapse" data-target="#churchCollapse" aria-expanded="false" aria-controls="churchCollapse">
-                        Show More
-                    </button>
-                    <div class="collapse" id="churchCollapse">
-                        <div class="card card-body">
-                            <div class='container justify-content-center'>
-                                <div class='row justify-content-left text-left'>
-                                    <p>The wedding ceremony will take place in St Philip's
-                                    church in Maidstone. We have a deep personal connection to
-                                    this church as it is the church in which Bethan was
-                                    christened.</p>
-                                </div>
-                                <iframe width="100%" height="450" frameborder="0" style="border:0"
-                                    src="https://www.google.com/maps/embed/v1/place?q=st%20philips%20church%20maidstone&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA" allowfullscreen></iframe>
-                            </div>
+                    <div class="col-lg-6 text-left white card card-body" >
+                        <p>The wedding ceremony will take place in St Philip's
+                        church in Maidstone. We have a deep personal connection to
+                        this church as it is the church in which Bethan was
+                        christened.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-info btn mb-2" type="button" data-toggle="collapse"
+                        data-target="#churchCollapse" aria-expanded="false" aria-controls="churchCollapse">
+                    More...
+                </button>
+            </div>
+
+            <div class="collapse" id="churchCollapse">
+                <div class="card card-body">
+                    <div class='container justify-content-center'>
+                        <div class='row justify-content-left text-left'>
+                            <p>The church is located near Maidstone Grammar School.</p>
+                            <p>There is limited on street parking around the
+                            church, and a number of nearby paid car parks
+                            including: </p>
+                            <p><ul>
+                                <li>
+                                    <a href="http://maps.google.co.uk/?ll=51.268674,0.525018&spn=0.000608,0.001742&t=h&z=20">
+                                    Brunswick Street</a> (0.2 miles) <strong>ME15 6NP</strong>
+                                </li>
+                                <li>
+                                    <a href="http://maps.google.co.uk/?ll=51.271053,0.529074&spn=0.001217,0.003484&t=h&z=19">
+                                    Mote Road</a> (0.3 miles) <strong>ME15 6ET</strong></li>
+                            </ul></p>
+                        </div>
+                        <div class='row justify-content-left text-left'>
+                            <p>You can pay for parking with coins (non-crypto), or with the <a href="https://www.myringgo.co.uk/">RingGo</a> app.</p>
+                        </div>
+                        <h3>Location of the Church</h3>
+                        <iframe width="100%" height="450" frameborder="0" style="border:0"
+                                src="https://www.google.com/maps/embed/v1/place?q=st%20philips%20church%20maidstone&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+        <div class="light">
+            <div class="container text-center">
+                <h2>Reception</h2>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container text-center">
+                <h4>Windyridge, Offham</h4>
+                {% if day_guest %}
+                <p><strong>15:00</strong> till <strong>midnight</strong></p>
+                {% else %}
+                <p><strong>19:30</strong> till <strong>midnight</strong></p>
+                {% endif %}
+            </div>
+
+            <div class="container text-center">
+                <div class="row flex-column-reverse flex-lg-row">
+                    <div class="col-lg-6 text-left white card card-body" >
+                        <p>Our reception will take place at Edd's Grandma's
+                        garden in Offham, West Malling. We will be
+                        providing some transport from the church to the
+                        field so please let us know in the RSVP if you will
+                        be using this.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src='static/images/windyridge.jpg' class='scaled-image mb-2' />
+                    </div>
+                </div>
+            </div>
+
+            <div class='text-center'>
+                <button class="btn btn-info btn mb-2" type="button" data-toggle="collapse"
+                        data-target="#receptionCollapse" aria-expanded="false" aria-controls="receptionCollapse">
+                    More...
+                </button>
+            </div>
+
+            <div class="collapse" id="receptionCollapse">
+                <div class="card card-body ">
+                    <div class='container justify-content-center'>
+                        <div class='row justify-content-left text-left'>
+                            <p>The reception venue (ME19 5NH) is down a narrow road (Tower Hill) and there will be no parking at the bottom.</p>
+                            <p>Instead, if you are driving, we kindly ask you to park in <a href="https://www.google.co.uk/maps/@51.2926007,0.3755175,17z">a nearby field</a> (ME19 5NY) and walk down to the venue.</p>
+                        </div>
+                        <h3>Location of the Reception</h3>
+                        <iframe width="100%" height="450" frameborder="0" style="border:0"
+                                    src="https://www.google.com/maps/embed/v1/place?q=51.288914%2C%200.376690&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="light">
+            <div class="container text-center">
+                <h2>Schedule</h2>
+            </div>
+        </div>
+        <div class="dark">
+            <div class="container text-center">
+                <p>We're still sorting out the exact timings of the day, here is the provisional schedule</p>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6 text-left white card card-body" >
+                        <ul>
+                            {% if day_guest %}
+                            <li><strong>12:30</strong> - Arrive at church</li>
+                            <li><strong>13:00</strong> - Wedding ceremony</li>
+                            <li><strong>13:45</strong> - Photographs outside church</li>
+                            <li><strong>14:15</strong> - Travel to Offham</li>
+                            <li><strong>15:00</strong> - Welcome drinks &amp; Canapes</li>
+                            <li><strong>16:00</strong> - Speeches</li>
+                            <li><strong>16:15</strong> - Breakfast</li>
+                            <li><strong>17:30</strong> - Free time</li>
+                            <li><strong>19:30</strong> - Evening guests arrive</li>
+                            {% else %}
+                            <li><strong>19:30</strong> - Arrive at Windyridge</li>
+                            {% endif %}
+                            <li><strong>20:00</strong> - First dance</li>
+                            <li><strong>00:00</strong> - Lights out</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="light">
+            <div class="container text-center">
+                <h2>Menu</h2>
+            </div>
+        </div>
+        <div class="dark">
+            <div class="container">
+                <div class="row">
+                    {% if day_guest %}
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <h3>Wedding Breakfast</h3>
+                        </div>
+                        <div class="col-lg-12 white card card-body">
+                            <p>From <strong>16:15</strong> until <strong>17:30</strong> we will eat BBQ</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="dark">
-                <div class="container">
-                    <h2>Reception</h2>
-                    <h4>Windyridge, Offham</h4>
-                        {% if day_guest %}
-                        <p><strong>15:00</strong> till <strong>midnight</strong></p>
-                        {% else %}
-                        <p><strong>19:30</strong> till <strong>midnight</strong></p>
-                        {% endif %}
-                    <div>
-                        <img src='static/images/windyridge.png' class='rounded scaled-panorama mb-2' />
+                    {% else %}
+                    <div class="col-lg-3">
                     </div>
-                    <button class="btn btn-info btn-lg mb-2" type="button" data-toggle="collapse" data-target="#receptionCollapse" aria-expanded="false" aria-controls="receptionCollapse">
-                        Show More
-                    </button>
-                    <div class="collapse" id="receptionCollapse">
-                        <div class="card card-body ">
-                            <div class='container justify-content-center'>
-                                <div class='row justify-content-left text-left'>
-                                    <p>Our reception will take place at Edd's Grandma's
-                                    garden in Offham, West Malling. We will be
-                                    providing some transport from the church to the
-                                    field so please let us know in the RSVP if you will
-                                    be using this.
-                                    </p>
-                                </div>
-                                <iframe width="100%" height="450" frameborder="0" style="border:0"
-                                        src="https://www.google.com/maps/embed/v1/place?q=51.288914%2C%200.376690&key=AIzaSyBcO1PPLgjlC5-AO-8qX-FY8zKHnrz3YVA" allowfullscreen></iframe>
-                            </div>
+                    {% endif %}
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <h3>Evening</h3>
+                        </div>
+                        <div class="col-lg-12 white card card-body">
+                            <p>From <strong>20:00</strong> until <strong>23:00</strong> there will be a Pizza van</p>
                         </div>
                     </div>
+                    {% if day_guest %}
+                    {% else %}
+                    <div class="col-lg-3">
+                    </div>
+                    {% endif %}
                 </div>
             </div>
+        </div>
 
-            <div class="light">
-                <div class="container">
-                    <h2>Schedule</h2>
-                    <p>The day will go as follows</p>
-                </div>
+        <div class="light">
+            <div class="container text-center">
+                <h2>Gifts</h2>
             </div>
+        </div>
 
-            <div class="dark">
-                <div class="container">
-                    <h2>Menu</h2>
-                    <h3>Wedding Breakfast</h3>
-                    <p>BBQ</p>
-                    <h3>Evening</h3>
-                    <p>Pizza van</p>
-                </div>
-            </div>
-
-            <div class="light">
-                <div class="container">
-                    <h2>Gifts</h2>
+        <div class="dark">
+            <div class="container">
+                <div class="row white card card-body">
                     <p>
                         As we have lived together for 2 years and are planning on
                         living abroad in the near future, we do not need any physical gifts. Your
@@ -295,22 +433,51 @@
                     </p>
                 </div>
             </div>
+        </div>
 
-            <div class="dark">
-                <div class="container">
-                    <h2>Accomodation</h2>
+        <div class="light">
+            <div class="container text-center">
+                <h2>Accomodation</h2>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container">
+                <div class="row white card card-body">
                     <p>You can stay in a hotel</p>
                 </div>
             </div>
+        </div>
 
-            <div class="light">
-                <div class="container">
-                    <h2>Taxis</h2>
+        <div class="light">
+            <div class="container text-center">
+                <h2>Taxis</h2>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container">
+                <div class="row white card card-body">
                     <p>You can book a cab</p>
                 </div>
             </div>
-
-            <footer><p>Edward: 07592602234 | Bethan: 07910499619<p></footer>
         </div>
+
+        <div class="light">
+            <div class="container text-center">
+                <h2>Contact Us</h2>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container">
+                <div class="row white card card-body">
+                    {{ contact_details|safe }}
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="text-white text-center">Don't forget to <strong>RSVP!<strong></footer>
     </body>
 </html>

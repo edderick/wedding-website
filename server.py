@@ -13,6 +13,11 @@ import sqlite3
 
 # TODO Extract DbAccess class
 
+def get_contact_details():
+    """Help me keep my privacy from github"""
+    with open('./contact_details.txt') as f:
+        return f.read()
+
 def set_code(email, code):
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
@@ -159,7 +164,8 @@ def site():
     props = {
         'day_guest': guest_type == 'day',
         'email': email,
-        'code': code
+        'code': code,
+        'contact_details': get_contact_details()
     }
 
     return render_template('site.html', **props)
