@@ -6,9 +6,9 @@
 
         <title>Bethan and Edward's Wedding</title>
 
-        <link rel="stylesheet" 
-              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
-              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+              integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
               crossorigin="anonymous">
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -31,7 +31,7 @@
 
             @media only screen and (max-width: 576px) {
                 .vertical{
-                    margin-top:0vh;
+                    margin-top:5vh;
                 }
             }
         </style>
@@ -39,7 +39,7 @@
         <script>
             function validatePassword() {
                 const password = document.getElementById('password').value;
-            
+
 				$.post("/validate_password", { password }, (data) => {
 					if (data === "success") {
 					   window.location.href = "/site";
