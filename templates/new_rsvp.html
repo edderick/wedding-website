@@ -96,6 +96,17 @@
                     window.location.href = '/site';
                 }
             }
+
+            window.onbeforeunload = function() {
+                return "You may have unsaved work!";
+            }
+
+            $(function(){
+                $('a').click(function(){
+                    window.onbeforeunload = null;
+                });
+            });
+
         </script>
 
     </head>
