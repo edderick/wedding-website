@@ -49,6 +49,23 @@ def set_guests(email, guests):
              guest['hasDiet'], guest['dietDetails'], email))
     conn.commit()
 
+def get_all_guests():
+    conn = sqlite3.connect('sqlite.db')
+    c = conn.cursor()
+
+    guests = []
+
+    for record in c.execute('SELECT * FROM rsvp'):
+        guests.append({
+            'firstname': record[0],
+            'lastname': record[1],
+            'isAttending': record[2],
+            'hasDiet': record[3],
+            'dietDetails': record[4]
+        })
+
+    return guests
+
 def get_guests(email):
     conn = sqlite3.connect('sqlite.db')
     c = conn.cursor()
@@ -294,6 +311,21 @@ def rsvp():
                 'guests': get_guests(email)
             }
             return render_template('existing_rsvp.html', **props)
+
+@app.route('/eseabrook1_report')
+def report():
+    password = request.args.get('password')
+    if password != 'REPLACE_ME':
+        return redirect('site')
+
+    guests = get_all_guests()
+    props = {
+        'day_guest': 'day',
+        'email': 'None',
+        'guests': guests,
+    }
+    return render_template('existing_rsvp.html', **props)
+
 
 @app.route('/update_rsvp', methods=['POST'])
 def update_rsvp():
