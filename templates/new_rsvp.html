@@ -108,6 +108,13 @@
 
     </head>
     <body>
+
+        <!-- Had to put it here to get it to work! -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+                integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha256-xaF9RpdtRxzwYMWg4ldJoyPWqyDPCRD0Cv7YEEe6Ie8=" crossorigin="anonymous"></script>
+
         <div class='container'>
         <h1>RSVP for {{ email }}</h1>
 
@@ -155,7 +162,7 @@
                         <div class="form-check">
                             <input id="guest_{{loop.index}}_has_diet" onchange="changeDiet({{loop.index}})"  class="form-check-input" type="checkbox" {% if guest.hasDiet == 'true'%} checked {% endif %}>
                             <label class="form-check-label" for="guest_{{loop.index}}_has_diet">
-                                Guest has special dietary requirements <a href="#">(See Menu)</a>
+                                Guest has special dietary requirements <a href="#modal" data-toggle="modal" data-target="#exampleModal">(See Menu)</a>
                             </label>
                         </div>
                     </div>
@@ -173,6 +180,97 @@
             <center>
                 <a href='#' onclick='handleSubmit()'>Save Changes</a> | <a href='#' onclick='gotoMainSite()'>Back to Main Site</a>
             </center>
+
+			<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Menu</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+				  </div>
+				  <div class="modal-body">
+            <div class="container">
+                <div class="row">
+                    {% if day_guest %}
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <h3>Wedding Breakfast</h3>
+                        </div>
+                        <div class="col-lg-12 white card card-body">
+                            <p>From <strong>16:15</strong> until <strong>17:30</strong>
+                               A BBQ lunch will be served in the Marquee:</p>
+                            <h4>Meats</h4>
+                            <ul>
+                                <li>Peri Peri chicken breast</li>
+                                <li>Sweet and sour king prawns</li>
+                                <li>Spiced lamb kofta with a beetroot and apple raita</li>
+                                <li>Selection of butchers sausages</li>
+                            </ul>
+                            <h4>Vegetarian/Vegan Options</h4>
+                            <ul>
+                                <li>BBQ Jackfruit in buns (Vegan)</li>
+                                <li>Spicy Vegan burgers</li>
+                                <li>Portobello mushrooms with Tzatzdiki and caramelised onions</li>
+                                <li>Halloumi & vegetable kebabs</li>
+                            </ul>
+                            <h4>Sides/Salads</h4>
+                            <ul>
+                                <li>Mediterranean vegetables (v)</li>
+                                <li>Garlic and rosemary potatoes (v)</li>
+                                <li>Greek salad with feta cheese (v)</li>
+                                <li>Garlic pesto pasta salad (v)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-lg-3">
+                    </div>
+                    {% endif %}
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <h3>Evening</h3>
+                        </div>
+                        <div class="col-lg-12 white card card-body">
+                            <p>From <strong>20:00</strong> until <strong>23:00</strong>
+                            there will be a Pizza van</p>
+                            <p>Menu <strong>TBC</strong></p>
+                            <h4>Pizza</h4>
+                            <ul>
+                                <li>Marinara Pizza</li>
+                                <li>Margherita Pizza</li>
+                                <li>Pepperoni Pizza</li>
+                                <li>Napoletana Pizza</li>
+                                <li>Prosciutto e Funghi Pizza</li>
+                                <li>4 Formaggi, Noci, and Porcini Pizza</li>
+                                <li>Calabrese Pizza</li>
+                                <li>Hawaiian Pizza</li>
+                                <li>4 Stagioni Pizza</li>
+                                <li>Vegetariana Pizza</li>
+                            </ul>
+                            <h4>Calzoni</h4>
+                            <ul>
+                                <li>Verace Calzoni</li>
+                                <li>Italian Salumi Calzoni</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% if day_guest %}
+                    {% else %}
+                    <div class="col-lg-3">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			  </div>
+			</div>
+
         </div>
     </body>
 </html>
