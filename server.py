@@ -42,11 +42,11 @@ def set_guests(email, guests):
     c.execute('''DELETE FROM rsvp WHERE email=?''', (email,))
     for guest in guests:
         c.execute('''INSERT INTO rsvp
-            (firstname, lastname, isAttending, hasDiet, dietDetails, email)
+            (firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport, email)
             VALUES
-            (?, ?, ?, ?, ?, ?)''',
+            (?, ?, ?, ?, ?, ?, ?)''',
             (guest['firstname'], guest['lastname'], guest['isAttending'],
-             guest['hasDiet'], guest['dietDetails'], email))
+             guest['hasDiet'], guest['dietDetails'], guest['needsTransport'], email))
     conn.commit()
 
 def get_all_guests():
@@ -55,13 +55,14 @@ def get_all_guests():
 
     guests = []
 
-    for record in c.execute('SELECT * FROM rsvp'):
+    for record in c.execute('SELECT firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport FROM rsvp'):
         guests.append({
             'firstname': record[0],
             'lastname': record[1],
             'isAttending': record[2],
             'hasDiet': record[3],
-            'dietDetails': record[4]
+            'dietDetails': record[4],
+            'needsTransport': record[5]
         })
 
     return guests
@@ -72,13 +73,14 @@ def get_guests(email):
 
     guests = []
 
-    for record in c.execute('SELECT * FROM rsvp WHERE email=?', (email,)):
+    for record in c.execute('SELECT firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport FROM rsvp WHERE email=?', (email,)):
         guests.append({
             'firstname': record[0],
             'lastname': record[1],
             'isAttending': record[2],
             'hasDiet': record[3],
-            'dietDetails': record[4]
+            'dietDetails': record[4],
+            'needsTransport': record[5]
         })
 
     return guests
@@ -118,7 +120,7 @@ def init():
         pass
 
     try:
-        c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, email)')
+        c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport, email)')
     except:
         pass
 

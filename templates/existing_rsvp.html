@@ -21,6 +21,9 @@
                 <th>Can Attend?</th>
                 <th>Has Dietary Requirements?</th>
                 <th>Dietary Requirement Details</th>
+                {% if day_guest %}
+                <th>Needs Transport</th>
+                {% endif %}
             </tr>
             <tbody>
                 {% for guest in guests %}
@@ -30,6 +33,9 @@
                     <td>{% if guest.isAttending == 'true' %}Yes{% else %}No{% endif %}</td>
                     <td>{% if guest.hasDiet == 'true' %}Yes{% else %}No{% endif %}</td>
                     <td>{{guest.dietDetails}}</td>
+                    {% if day_guest %}
+                    <td>{% if guest.needsTransport == 'true' %}Yes{% else %}No{% endif %}</td>
+                    {% endif %}
 				</tr>
                 {% endfor %}
             <tbody>

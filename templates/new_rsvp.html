@@ -26,6 +26,12 @@
                 const isAttending = document.getElementById(`guest_${i}_attending`).checked;
                 document.getElementById(`guest_${i}_has_diet`).value = 'false';
                 document.getElementById(`guest_${i}_diet`).style.display = isAttending ? 'block' : 'none';
+
+                {% if day_guest %}
+                document.getElementById(`guest_${i}_needs_transport`).value = 'true';
+                document.getElementById(`guest_${i}_transport`).style.display = isAttending ? 'block' : 'none';
+                {% endif %}
+
                 changeDiet(i);
             }
 
@@ -41,12 +47,19 @@
                 const numGuests = parseInt(document.getElementById('numGuests').value, 10);
 
                 for (let i = 1; i < 1 + numGuests; i++) {
+                    const isAttending = document.getElementById(`guest_${i}_attending`).checked;
+
                     const guest = {
                         firstname: document.getElementById(`guest_${i}_firstname`).value.trim(),
                         lastname: document.getElementById(`guest_${i}_lastname`).value.trim(),
-                        isAttending: document.getElementById(`guest_${i}_attending`).checked ? 'true' : 'false',
-                        hasDiet: document.getElementById(`guest_${i}_has_diet`).checked ? 'true' : 'false',
+                        isAttending: isAttending ? 'true' : 'false',
+                        hasDiet: isAttending && document.getElementById(`guest_${i}_has_diet`).checked ? 'true' : 'false',
                         dietDetails: document.getElementById(`guest_${i}_diet_details_text`).value.trim(),
+                    {% if day_guest %}
+						needsTransport: isAttending && document.getElementById(`guest_${i}_needs_transport`).checked ? 'true' : 'false',
+                    {% else %}
+                        needsTransport: 'false',
+                    {% endif %}
                     };
 
                     if (guest.firstname == '') {
@@ -154,6 +167,21 @@
                         </label>
                     </div>
                 </div>
+
+				{% if day_guest %}
+
+                <div  id="guest_{{loop.index}}_transport" {% if guest.isAttending != 'true' %} style='display: none' {% endif %}>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input id="guest_{{loop.index}}_needs_transport" class="form-check-input" type="checkbox" {% if guest.needsTransport == 'true'%} checked {% endif %}>
+                            <label class="form-check-label" for="guest_{{loop.index}}_needs_transport">
+                                Guest needs transport from Church to Offham
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+				{% endif %}
 
                 <div  id="guest_{{loop.index}}_diet" {% if guest.isAttending != 'true' %} style='display: none' {% endif %}>
 
