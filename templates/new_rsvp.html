@@ -131,7 +131,7 @@
         <div class='container'>
         <h1>RSVP for {{ email }}</h1>
 
-        Number of guests you'd like to RSVP for (including you!):
+        Number of guests you'd like to RSVP for (including you):
         <select id='numGuests' onchange='numGuestsChange()' style='width: 100px'>
             {% for i in range(1, 10) %}
             <option value="{{i}}" {% if i == numGuestsSelected %} selected {% endif %}>{{i}}</option>
@@ -140,7 +140,7 @@
 
         {% for guest in guests %}
         <div id="guest_{{loop.index}}"  {% if loop.index > numGuestsSelected %}style='display:none'{% endif %}>
-            <h2>Guest {{loop.index}} {% if i == 1 %}(You!){% endif %}</h2>
+            <h2>Guest {{loop.index}} {% if loop.index == 1 %}(You){% endif %}</h2>
             <form action="javascript:void()" class='ml-2'>
 
                 <div class='form-row'>
