@@ -36,8 +36,8 @@
                     <td>{{guest.dietDetails}}</td>
                     {% if day_guest %}
                     <td>{% if guest.needsTransport == 'true' %}Yes{% else %}No{% endif %}</td>
-                    <td>{{guest.songRequest}}</td>
                     {% endif %}
+                    <td>{{guest.songRequest}}</td>
 				</tr>
                 {% endfor %}
             <tbody>
