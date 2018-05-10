@@ -60,6 +60,7 @@
                     {% else %}
                         needsTransport: 'false',
                     {% endif %}
+                        songRequest: document.getElementById(`guest_${i}_song_request`).value.trim()
                     };
 
                     if (guest.firstname == '') {
@@ -198,8 +199,15 @@
                     </div>
 
                     <div class='form-row' id="guest_{{loop.index}}_diet_details" {% if guest.hasDiet == 'true' %} style='display: block' {% else %}  style='display: none' {% endif %}>
-                        Please describe dietarty requirements:<br/>
+                        Please describe dietary requirements:<br/>
                         <textarea id='guest_{{loop.index}}_diet_details_text' class="form-control" rows='3' >{{guest.dietDetails}}</textarea>
+                    </div>
+
+                    <div class='form-row'>
+                        <div class='form-group col-md-6'>
+                            <label>Song Request (Optional)</label>
+                            <input id="guest_{{loop.index}}_song_request" type="text" value='{{guest.songRequest}}' class='form-control'/>
+                        </div>
                     </div>
 
                 </div>

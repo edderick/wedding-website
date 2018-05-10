@@ -32,7 +32,8 @@ _guest_fields = [
     'isAttending',
     'hasDiet',
     'dietDetails',
-    'needsTransport'
+    'needsTransport',
+    'songRequest'
 ]
 
 def _record_to_guest(record):
