@@ -1,7 +1,7 @@
 #! /usr/local/bin/python
-import sqlite3
+import db
 
-conn = sqlite3.connect('sqlite.db')
+conn = db._connect()
 c = conn.cursor()
 
 try:
@@ -12,7 +12,7 @@ except:
 
 try:
     c.execute('CREATE TABLE rsvp ({})'.format(
-        ', '.join(_guest_fields + ['email']),
+        ', '.join(db._guest_fields + ['email']),
     ))
 except:
     print("Can't create table rsvp")
