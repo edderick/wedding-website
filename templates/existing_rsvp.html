@@ -41,6 +41,16 @@
             <tbody>
 		</table>
 
+        {% if message is not none and message != '' %}
+        <p>You left us the following message:</p>
+        <div class="container">
+            <div class="row white card card-body">
+                <p>{{message}}</p>
+            </div>
+        </div>
+        <br />
+        {% endif %}
+
         <center>
             <a href='?edit=1'>Make changes</a> | <a href='/site'>Back to Main Site</a>
         </center>

@@ -76,6 +76,29 @@ def get_guests(email):
 
     return [_record_to_guest(record) for record in c.execute(sql, (email,))]
 
+# --- Message table ---
+
+def set_message(email, message):
+    conn = _connect()
+    c = conn.cursor()
+
+    c.execute('DELETE FROM message WHERE email=?', (email,))
+    c.execute('INSERT INTO message VALUES (?, ?)', (email, message))
+    conn.commit()
+
+def get_message(email):
+    conn = _connect()
+    c = conn.cursor()
+
+    c.execute('SELECT * FROM message WHERE email=?', (email,))
+
+    record = c.fetchone()
+
+    if record is None:
+        return None
+
+    return record[1]
+
 # --- Password table ---
 
 def get_guest_type_for_password(password):

@@ -80,9 +80,11 @@
                     guests.push(guest);
                 }
 
+                const message = document.getElementById('message_text').value;
+
                 console.log(JSON.stringify(guests));
 
-				$.post("/update_rsvp", { guests: JSON.stringify(guests) }, (data) => {
+				$.post("/update_rsvp", { guests: JSON.stringify(guests), message: message}, (data) => {
                     if (data == 'OK') {
 					   window.location.href = "/rsvp";
                     }
@@ -204,6 +206,17 @@
             </form>
             </div>
             {% endfor %}
+
+            <br />
+
+            <form action="javascript:void()" class='ml-2'>
+                <div class='form-row' id="message">
+                    If you would like, please use this entry to leave a personal message for Edward and Bethan:<br/>
+                    <textarea id='message_text' class="form-control" rows='3' >{{ message }}</textarea>
+                </div>
+            </form>
+
+            <br/>
 
             <center>
                 <a href='#' onclick='handleSubmit()'>Save Changes</a> | <a href='#' onclick='gotoMainSite()'>Back to Main Site</a>

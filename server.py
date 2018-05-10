@@ -218,14 +218,16 @@ def rsvp():
                 'day_guest': guest_type == 'day',
                 'email': email,
                 'guests': guests + [{} for i in range(len(guests) + 1, 10)],
-                'numGuestsSelected': len(guests)
+                'numGuestsSelected': len(guests),
+                'message': db.get_message(email)
             }
             return render_template('new_rsvp.html', **props)
         else:
             props = {
                 'day_guest': guest_type == 'day',
                 'email': email,
-                'guests': db.get_guests(email)
+                'guests': db.get_guests(email),
+                'message': db.get_message(email)
             }
             return render_template('existing_rsvp.html', **props)
 
@@ -264,9 +266,11 @@ def update_rsvp():
         return redirect('/site')
 
     guests = json.loads(request.form['guests'])
+    message = request.form['message'].strip()
 
     if len (guests) >= 10:
         return 'NOPE'
 
     db.set_guests(email, guests)
+    db.set_message(email, message)
     return 'OK'

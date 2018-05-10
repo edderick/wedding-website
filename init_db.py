@@ -24,6 +24,13 @@ except:
     print("Can't create table password")
     pass
 
+try:
+    c.execute('CREATE TABLE message (email, message)')
+except:
+    print("Can't create table message")
+    pass
+
+
 # INSERT INTO password vlaues ("day", "day")
 # INSERT INTO password vlaues ("evening", "evening")
 
