@@ -33,6 +33,7 @@ app = Flask(__name__)
 
 @app.route("/reset")
 def reset():
+    """Reset a user's cookies. Effectively logs them out."""
     response = make_response('Your cookie has been cleared')
     response.set_cookie('guest_type', '',  expires = 0)
     response.set_cookie('email', '',  expires = 0)
@@ -42,9 +43,8 @@ def reset():
 
 @app.route("/")
 def index():
-    guest_type = request.cookies.get('guest_type')
-
-    if guest_type is not None:
+    """Returns the landing page (with password entry)"""
+    if request.cookies.get('guest_type') is not None:
         return redirect('/site')
 
     return render_template('index.html')
@@ -52,8 +52,10 @@ def index():
 
 @app.route("/validate_password", methods=['POST'])
 def validate_password():
+    """Checks the POSTed password against the database.
+       Called from the landing page.
+    """
     password = request.form['password'].strip().lower()
-
     guest_type = db.get_guest_type_for_password(password)
 
     if guest_type is None:
@@ -68,6 +70,7 @@ def validate_password():
 
 @app.route("/site")
 def site():
+    """Returns the main information page to the guest"""
     guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email', '')
     code = request.cookies.get('code', '')
@@ -87,6 +90,7 @@ def site():
 
 @app.route("/validate_email", methods=['POST'])
 def validate_email():
+    """Validates a user's email and code are correct"""
     guest_type = request.cookies.get('guest_type')
     email = request.form['email'].strip().lower()
     code = request.cookies.get('code', '')
