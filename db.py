@@ -90,33 +90,6 @@ def get_guest_type_for_password(password):
 
     return record[0]
 
-def init():
-    # TODO: This should be a standalone script
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-
-    try:
-        c.execute('CREATE TABLE code (email, code)')
-    except:
-        pass
-
-    try:
-        c.execute('CREATE TABLE rsvp ({})'.format(
-            ', '.join(_guest_fields + ['email']),
-        ))
-    except:
-        pass
-
-    try:
-        c.execute('CREATE TABLE password (password, guest_type)')
-    except:
-        pass
-
-    # INSERT INTO password vlaues ("day", "day")
-    # INSERT INTO password vlaues ("evening", "evening")
-
-    conn.commit()
-
 
 def _connect():
     return sqlite3.connect('sqlite.db')

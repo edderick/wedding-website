@@ -9,32 +9,26 @@ from async_email_sender import send_email
 import json
 
 
+# Transient state to prevent abuse
+hit_counter = Counter()
+sent_counter = Counter()
+
+
+def make_code():
+    return "{}".format(randint(1000, 9999))
+
+
 def get_contact_details():
     """Help me keep my privacy from github"""
     with open('./contact_details.txt') as f:
         return f.read()
 
 
-# Transient state to prevent abuse
-hit_counter = Counter()
-sent_counter = Counter()
-
-def make_code():
-    return "{}".format(randint(1000, 9999))
-
-
 app = Flask(__name__)
-
-
-@app.route("/init")
-def init():
-    db.init()
-    return "Database initialized"
 
 
 @app.route("/reset")
 def reset():
-    # TODO: Is this needed in production?
     response = make_response('Your cookie has been cleared')
     response.set_cookie('guest_type', '',  expires = 0)
     response.set_cookie('email', '',  expires = 0)
