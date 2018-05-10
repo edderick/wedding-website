@@ -32,6 +32,8 @@
                 document.getElementById(`guest_${i}_transport`).style.display = isAttending ? 'block' : 'none';
                 {% endif %}
 
+                document.getElementById(`guest_${i}_song_request`).value = '';
+
                 changeDiet(i);
             }
 
