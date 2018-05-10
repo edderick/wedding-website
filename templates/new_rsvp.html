@@ -131,7 +131,7 @@
         <div class='container'>
         <h1>RSVP for {{ email }}</h1>
 
-        Number of guests you'd like to RSVP for:
+        Number of guests you'd like to RSVP for (including you!):
         <select id='numGuests' onchange='numGuestsChange()' style='width: 100px'>
             {% for i in range(1, 10) %}
             <option value="{{i}}" {% if i == numGuestsSelected %} selected {% endif %}>{{i}}</option>
@@ -190,7 +190,7 @@
                         <div class="form-check">
                             <input id="guest_{{loop.index}}_has_diet" onchange="changeDiet({{loop.index}})"  class="form-check-input" type="checkbox" {% if guest.hasDiet == 'true'%} checked {% endif %}>
                             <label class="form-check-label" for="guest_{{loop.index}}_has_diet">
-                                Guest has special dietary requirements <a href="#modal" data-toggle="modal" data-target="#exampleModal">(See Menu)</a>
+                                Guest has any dietary requirements (e.g. vegetarian, vegan, celiac, etc.) <a href="#modal" data-toggle="modal" data-target="#exampleModal">(See Menu)</a>
                             </label>
                         </div>
                     </div>
