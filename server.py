@@ -1,101 +1,19 @@
 from flask import Flask
-from flask import render_template
-from flask import request
-from flask import make_response
-from flask import abort, redirect, url_for
+from flask import abort, redirect, url_for, request, make_response, render_template
 
+import db
 from random import randint
 from collections import Counter
 from async_email_sender import send_email
 
 import json
-import sqlite3
 
-# TODO Extract DbAccess class
 
 def get_contact_details():
     """Help me keep my privacy from github"""
     with open('./contact_details.txt') as f:
         return f.read()
 
-def set_code(email, code):
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO code VALUES (?, ?)", (email, code))
-    conn.commit()
-
-def get_code(email):
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM code WHERE email=?', (email,))
-
-    record = c.fetchone()
-
-    if record is None:
-        return None
-
-    return record[1]
-
-def set_guests(email, guests):
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-    c.execute('''DELETE FROM rsvp WHERE email=?''', (email,))
-    for guest in guests:
-        c.execute('''INSERT INTO rsvp
-            (firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport, email)
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?)''',
-            (guest['firstname'], guest['lastname'], guest['isAttending'],
-             guest['hasDiet'], guest['dietDetails'], guest['needsTransport'], email))
-    conn.commit()
-
-def get_all_guests():
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-
-    guests = []
-
-    for record in c.execute('SELECT firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport FROM rsvp'):
-        guests.append({
-            'firstname': record[0],
-            'lastname': record[1],
-            'isAttending': record[2],
-            'hasDiet': record[3],
-            'dietDetails': record[4],
-            'needsTransport': record[5]
-        })
-
-    return guests
-
-def get_guests(email):
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-
-    guests = []
-
-    for record in c.execute('SELECT firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport FROM rsvp WHERE email=?', (email,)):
-        guests.append({
-            'firstname': record[0],
-            'lastname': record[1],
-            'isAttending': record[2],
-            'hasDiet': record[3],
-            'dietDetails': record[4],
-            'needsTransport': record[5]
-        })
-
-    return guests
-
-def get_guest_type_for_password(password):
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-    c.execute('SELECT guest_type FROM password WHERE password=?', (password,))
-
-    record = c.fetchone()
-
-    if record is None:
-        return None
-
-    return record[0]
 
 # Transient state to prevent abuse
 hit_counter = Counter()
@@ -110,31 +28,9 @@ app = Flask(__name__)
 
 @app.route("/init")
 def init():
-    # TODO: This should be a standalone script
-    conn = sqlite3.connect('sqlite.db')
-    c = conn.cursor()
-
-    try:
-        c.execute('CREATE TABLE code (email, code)')
-    except:
-        pass
-
-    try:
-        c.execute('CREATE TABLE rsvp (firstname, lastname, isAttending, hasDiet, dietDetails, needsTransport, email)')
-    except:
-        pass
-
-    try:
-        c.execute('CREATE TABLE password (password, guest_type)')
-    except:
-        pass
-
-    # INSERT INTO password vlaues ("day", "day")
-    # INSERT INTO password vlaues ("evening", "evening")
-
-    conn.commit()
-
+    db.init()
     return "Database initialized"
+
 
 @app.route("/reset")
 def reset():
@@ -145,6 +41,7 @@ def reset():
     response.set_cookie('code', '',  expires = 0)
     return response
 
+
 @app.route("/")
 def index():
     guest_type = request.cookies.get('guest_type')
@@ -154,11 +51,12 @@ def index():
 
     return render_template('index.html')
 
+
 @app.route("/validate_password", methods=['POST'])
 def validate_password():
     password = request.form['password'].strip().lower()
 
-    guest_type = get_guest_type_for_password(password)
+    guest_type = db.get_guest_type_for_password(password)
 
     if guest_type is None:
         response = make_response('error')
@@ -168,7 +66,6 @@ def validate_password():
     response = make_response('success')
     response.set_cookie('guest_type', guest_type)
     return response
-
 
 
 @app.route("/site")
@@ -189,6 +86,7 @@ def site():
 
     return render_template('site.html', **props)
 
+
 @app.route("/validate_email", methods=['POST'])
 def validate_email():
     guest_type = request.cookies.get('guest_type')
@@ -205,14 +103,14 @@ def validate_email():
         if email in hit_counter and hit_counter[email] > 3:
             return 'BLOCKED'
 
-        if code == get_code(email):
+        if code == db.get_code_for_email(email):
             return 'rsvp'
         else:
             hit_counter[email] += 1
 
-    if get_code(email) is None:
+    if db.get_code_for_email(email) is None:
         code = make_code()
-        set_code(email, code)
+        db.set_code_for_email(email, code)
 
         send_email([email], "Your Confirmation Code", "Your code is: {}".format(code))
 
@@ -220,6 +118,7 @@ def validate_email():
     response.set_cookie('email', email)
     response.set_cookie('code', '',  expires = 0)
     return response
+
 
 @app.route("/send_again", methods=['POST'])
 def send_again():
@@ -234,16 +133,17 @@ def send_again():
     if sent_counter[email] > 3:
         return 'BLOCKED'
 
-    if get_code(email) is None:
+    if db.get_code_for_email(email) is None:
         code = make_code()
-        set_code(email, code)
+        db.set_code_for_email(email, code)
 
-    code = get_code(email)
+    code = db.get_code_for_email(email)
 
     send_email([email], "Your Confirmation Code", "Your code is: {}".format(code))
 
     response = make_response('success')
     return response
+
 
 @app.route("/validate_code", methods=['POST'])
 def validate_code():
@@ -260,7 +160,7 @@ def validate_code():
     if email in hit_counter and hit_counter[email] > 3:
         return 'BLOCKED'
 
-    if code != get_code(email):
+    if code != db.get_code_for_email(email):
         hit_counter[email] += 1
         return 'Nope'
 
@@ -283,10 +183,10 @@ def rsvp():
     if email is None:
         return redirect('/site')
 
-    if code != get_code(email):
+    if code != db.get_code_for_email(email):
         return redirect('/site')
 
-    if len(get_guests(email)) == 0:
+    if len(db.get_guests(email)) == 0:
         props = {
             'day_guest': guest_type == 'day',
             'email': email,
@@ -298,7 +198,7 @@ def rsvp():
 
     else:
         if edit:
-            guests = get_guests(email)
+            guests = db.get_guests(email)
             props = {
                 'day_guest': guest_type == 'day',
                 'email': email,
@@ -310,9 +210,10 @@ def rsvp():
             props = {
                 'day_guest': guest_type == 'day',
                 'email': email,
-                'guests': get_guests(email)
+                'guests': db.get_guests(email)
             }
             return render_template('existing_rsvp.html', **props)
+
 
 @app.route('/eseabrook1_report')
 def report():
@@ -320,7 +221,7 @@ def report():
     if password != 'REPLACE_ME':
         return redirect('site')
 
-    guests = get_all_guests()
+    guests = db.get_all_guests()
     props = {
         'day_guest': 'day',
         'email': 'None',
@@ -341,7 +242,7 @@ def update_rsvp():
     if email is None:
         return redirect('/site')
 
-    if code != get_code(email):
+    if code != db.get_code_for_email(email):
         return redirect('/site')
 
     guests = json.loads(request.form['guests'])
@@ -349,5 +250,5 @@ def update_rsvp():
     if len (guests) >= 10:
         return 'NOPE'
 
-    set_guests(email, guests)
+    db.set_guests(email, guests)
     return 'OK'
