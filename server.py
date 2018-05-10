@@ -2,6 +2,7 @@ from flask import Flask
 from flask import abort, redirect, url_for, request, make_response, render_template
 
 import db
+from email_blacklist import is_legit
 from random import randint
 from collections import Counter
 from async_email_sender import send_email
@@ -10,6 +11,9 @@ import json
 
 
 # Transient state to prevent abuse
+MAX_HITS = 3
+MAX_SENDS = 3
+
 hit_counter = Counter()
 sent_counter = Counter()
 
@@ -93,8 +97,12 @@ def validate_email():
     if "@" not in email:
         return 'error'
 
+    if not is_legit(email):
+        print('email: {} looks fake...'.format(email))
+        return 'error'
+
     if code != '':
-        if email in hit_counter and hit_counter[email] > 3:
+        if email in hit_counter and hit_counter[email] > MAX_HITS:
             return 'BLOCKED'
 
         if code == db.get_code_for_email(email):
@@ -124,7 +132,7 @@ def send_again():
 
     sent_counter[email] += 1
 
-    if sent_counter[email] > 3:
+    if sent_counter[email] > MAX_SENDS:
         return 'BLOCKED'
 
     if db.get_code_for_email(email) is None:
@@ -151,7 +159,7 @@ def validate_code():
     if email is None:
         return redirect('/site')
 
-    if email in hit_counter and hit_counter[email] > 3:
+    if email in hit_counter and hit_counter[email] > MAX_HITS:
         return 'BLOCKED'
 
     if code != db.get_code_for_email(email):
