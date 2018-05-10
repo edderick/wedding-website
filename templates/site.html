@@ -143,6 +143,8 @@
 					}
 					else {
                         alert("That is probably not a valid email. Please try another");
+                        document.getElementById('email').disabled = false;
+                        document.getElementById('email-button').disabled = false;
 					}
 				});
             }

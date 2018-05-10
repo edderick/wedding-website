@@ -11,11 +11,11 @@ import json
 
 
 # Transient state to prevent abuse
-MAX_HITS = 3
-MAX_SENDS = 3
-
 hit_counter = Counter()
 sent_counter = Counter()
+
+MAX_HITS = 3  # Maximum number of times a code can be checked
+MAX_SENDS = 3 # Maximum number of times an email of the code can be sent
 
 
 def make_code():
@@ -90,7 +90,10 @@ def site():
 
 @app.route("/validate_email", methods=['POST'])
 def validate_email():
-    """Validates a user's email and code are correct"""
+    """Validates a user's email is valid.
+       If the code is also set and is correct, the second level of validation
+       is skipped.
+    """
     guest_type = request.cookies.get('guest_type')
     email = request.form['email'].strip().lower()
     code = request.cookies.get('code', '')
@@ -128,6 +131,9 @@ def validate_email():
 
 @app.route("/send_again", methods=['POST'])
 def send_again():
+    """Sends the confirmation email again.
+       Used if the user is returning to the page and has forgotten their code.
+    """
     guest_type = request.cookies.get('guest_type')
     email = request.form['email'].strip().lower()
 
@@ -153,6 +159,8 @@ def send_again():
 
 @app.route("/validate_code", methods=['POST'])
 def validate_code():
+    """Validates a user's email and code against what is stored in the database.
+    """
     guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email')
     code = request.form['code'].strip().lower()
@@ -177,6 +185,7 @@ def validate_code():
 
 @app.route('/rsvp')
 def rsvp():
+    """Renders the RSVP page (create, edit or view)"""
     guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email')
     code = request.cookies.get('code')
@@ -223,6 +232,7 @@ def rsvp():
 
 @app.route('/eseabrook1_report')
 def report():
+    """A hack to generate a report page using the templates from above"""
     password = request.args.get('password')
     if password != 'REPLACE_ME':
         return redirect('site')
@@ -238,6 +248,8 @@ def report():
 
 @app.route('/update_rsvp', methods=['POST'])
 def update_rsvp():
+    """Updates (or creates) the guests in the RSVP table for the specified email
+    """
     guest_type = request.cookies.get('guest_type')
     email = request.cookies.get('email')
     code = request.cookies.get('code')
