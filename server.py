@@ -236,7 +236,7 @@ def rsvp():
 def report():
     """A hack to generate a report page using the templates from above"""
     password = request.args.get('password')
-    if password != 'REPLACE_ME':
+    if db.get_guest_type_for_password(password) != 'superuser':
         return redirect('site')
 
     guests = db.get_all_guests()
