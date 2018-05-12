@@ -87,11 +87,22 @@ def set_message(email, message):
     c.execute('INSERT INTO message VALUES (?, ?)', (email, message))
     conn.commit()
 
+def get_all_messages():
+    conn = _connect()
+    c = conn.cursor()
+
+    sql = 'SELECT email, message FROM message'
+
+    return [{
+        'email': record[0],
+        'message': record[1]
+    } for record in c.execute(sql) if len(record[1])]
+
 def get_message(email):
     conn = _connect()
     c = conn.cursor()
 
-    c.execute('SELECT * FROM message WHERE email=?', (email,))
+    c.execute('SELECT email, message FROM message WHERE email=?', (email,))
 
     record = c.fetchone()
 

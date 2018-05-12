@@ -239,13 +239,13 @@ def report():
     if db.get_guest_type_for_password(password) != 'superuser':
         return redirect('site')
 
-    guests = db.get_all_guests()
     props = {
         'day_guest': 'day',
         'email': 'None',
-        'guests': guests,
+        'guests': db.get_all_guests(),
+        'messages': db.get_all_messages()
     }
-    return render_template('existing_rsvp.html', **props)
+    return render_template('report.html', **props)
 
 
 @app.route('/update_rsvp', methods=['POST'])
