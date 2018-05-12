@@ -8,10 +8,47 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
 
+		<script>
+			// Set the date we're counting down to
+			var countDownDate = new Date("Aug 11, 2018 13:00:00").getTime();
+
+			// Update the count down every 1 second
+			var x = setInterval(function() {
+
+			  // Get todays date and time
+			  var now = new Date().getTime();
+
+			  // Find the distance between now an the count down date
+			  var distance = countDownDate - now;
+
+			  // Time calculations for days, hours, minutes and seconds
+			  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			  // Display the result in the element with id="demo"
+			  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+			  + minutes + "m " + seconds + "s ";
+
+			  // If the count down is finished, write some text
+			  if (distance < 0) {
+				clearInterval(x);
+				document.getElementById("demo").innerHTML = "EXPIRED";
+			  }
+			}, 1000);
+		</script>
     </head>
     <body>
         <div class='container'>
-        <h1>All RSVPs</h1>
+        <h1>Executive Report</h1>
+        <p>
+            Here is an executive summary of the state of the invitation campain
+        </p>
+        <h2>Countdown</h2>
+        <p>The wedding will begin in: <strong><span id="demo">XXd XXh XXm XXs</span></strong></p>
+
+        <h2>RSVPs</h2>
         <p>The following {{guests|length}} guests have responded:</p>
 
 		<table class="table">
@@ -23,6 +60,7 @@
                 <th>Dietary Requirement Details</th>
                 <th>Needs Transport</th>
                 <th>Song Request</th>
+                <th>Contact Email</th>
             </tr>
             <tbody>
                 {% for guest in guests %}
@@ -34,11 +72,13 @@
                     <td>{{guest.dietDetails}}</td>
                     <td>{% if guest.needsTransport == 'true' %}Yes{% else %}No{% endif %}</td>
                     <td>{{guest.songRequest}}</td>
+                    <td>{{guest.email}}</td>
 				</tr>
                 {% endfor %}
             <tbody>
 		</table>
 
+        <h2>Messages</h2>
         <p>The following messages have been left:</p>
 		<table class="table">
             <tr>
