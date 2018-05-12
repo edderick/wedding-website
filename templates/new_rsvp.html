@@ -62,7 +62,8 @@
                     {% else %}
                         needsTransport: 'false',
                     {% endif %}
-                        songRequest: document.getElementById(`guest_${i}_song_request`).value.trim()
+                        songRequest: document.getElementById(`guest_${i}_song_request`).value.trim(),
+                        email: '{{ email }}'
                     };
 
                     if (guest.firstname == '') {

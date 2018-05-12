@@ -33,7 +33,8 @@ _guest_fields = [
     'hasDiet',
     'dietDetails',
     'needsTransport',
-    'songRequest'
+    'songRequest',
+    'email'
 ]
 
 def _record_to_guest(record):
@@ -51,11 +52,11 @@ def set_guests(email, guests):
     c.execute('''DELETE FROM rsvp WHERE email=?''', (email,))
 
     sql = 'INSERT INTO rsvp ({}) VALUES ({})'.format(
-        ', '.join(_guest_fields + ['email']),
-        ', '.join(['?'] * len(_guest_fields + ['email'])))
+        ', '.join(_guest_fields),
+        ', '.join(['?'] * len(_guest_fields)))
 
     for guest in guests:
-        c.execute(sql, _guest_to_record(guest) + (email,))
+        c.execute(sql, _guest_to_record(guest))
 
     conn.commit()
 
