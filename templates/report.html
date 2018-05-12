@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Edward and Bethan's Wedding</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+
+    </head>
+    <body>
+        <div class='container'>
+        <h1>All RSVPs</h1>
+        <p>The following {{guests|length}} guests have responded:</p>
+
+		<table class="table">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Can Attend?</th>
+                <th>Has Dietary Requirements?</th>
+                <th>Dietary Requirement Details</th>
+                <th>Needs Transport</th>
+                <th>Song Request</th>
+            </tr>
+            <tbody>
+                {% for guest in guests %}
+				<tr>
+                    <td>{{guest.firstname}}</td>
+                    <td>{{guest.lastname}}</td>
+                    <td>{% if guest.isAttending == 'true' %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if guest.hasDiet == 'true' %}Yes{% else %}No{% endif %}</td>
+                    <td>{{guest.dietDetails}}</td>
+                    <td>{% if guest.needsTransport == 'true' %}Yes{% else %}No{% endif %}</td>
+                    <td>{{guest.songRequest}}</td>
+				</tr>
+                {% endfor %}
+            <tbody>
+		</table>
+
+        <p>The following messages have been left:</p>
+		<table class="table">
+            <tr>
+                <th>e-mail Address</th>
+                <th>Message</th>
+            </tr>
+            <tbody>
+                {% for message in messages %}
+				<tr>
+                    <td>{{message.email}}</td>
+                    <td>{{message.message}}</td>
+				</tr>
+                {% endfor %}
+            <tbody>
+		</table>
+
+        </div>
+    </body>
+</html>
