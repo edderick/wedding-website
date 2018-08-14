@@ -287,6 +287,30 @@ def update_rsvp():
     return 'OK'
 
 
+from PIL import Image, ExifTags
+
+def fixExif(filepath):
+    try:
+	image=Image.open(filepath)
+	for orientation in ExifTags.TAGS.keys():
+	    if ExifTags.TAGS[orientation]=='Orientation':
+		break
+	exif=dict(image._getexif().items())
+
+	if exif[orientation] == 3:
+	    image=image.rotate(180, expand=True)
+	elif exif[orientation] == 6:
+	    image=image.rotate(270, expand=True)
+	elif exif[orientation] == 8:
+	    image=image.rotate(90, expand=True)
+	image.save(filepath)
+	image.close()
+
+    except (AttributeError, KeyError, IndexError):
+	# cases: image don't have getexif
+	pass
+
+
 @app.route('/upload_photos', methods=['GET', 'POST'])
 def upload_photos():
     if request.method == 'POST':
@@ -303,6 +327,7 @@ def upload_photos():
         if file and allowed_file(file.filename):
             filename = '{}_{}'.format(uuid.uuid4().hex, secure_filename(file.filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            fixExif(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/static/user_uploads/{}'.format(filename))
     return render_template('upload.html')
 
