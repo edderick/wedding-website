@@ -1,13 +1,16 @@
 from flask import Flask
 from flask import abort, redirect, url_for, request, make_response, render_template
 
-import db
+from werkzeug.utils import secure_filename
+
 from email_blacklist import is_legit
 from random import randint
 from collections import Counter
 from async_email_sender import send_email
 
+import db
 import json
+import os
 
 
 # Transient state to prevent abuse
@@ -28,7 +31,14 @@ def get_contact_details():
         return f.read()
 
 
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = './static/user_uploads'
 
 
 @app.route("/reset")
@@ -274,3 +284,46 @@ def update_rsvp():
     db.set_guests(email, guests)
     db.set_message(email, message)
     return 'OK'
+
+
+@app.route('/upload_photos', methods=['GET', 'POST'])
+def upload_photos():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect('/static/user_uploads/{}'.format(filename))
+    return '''
+    <!doctype html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
+    <title>Upload your photos</title>
+    <h1>Upload your Photos</h1>
+    <p>Please upload your photos to this web page!</p>
+    <form action="/upload_photos" class="dropzone">
+      <div class="fallback">
+        <input name="file" type="file" multiple />
+      </div>
+    </form>
+    '''
+
+
+@app.route('/gallery')
+def list_files():
+    images = os.listdir(app.config['UPLOAD_FOLDER'])
+    html_images = [
+        "<img src=/static/user_uploads/{}/ width=300>".format(i)
+        for i in images
+        if allowed_file(i)
+    ]
+    return ' '.join(html_images)
