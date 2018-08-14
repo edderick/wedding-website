@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Wedding Photo Gallery</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+
+        <link href="https://fonts.googleapis.com/css?family=Cutive+Mono"
+              rel="stylesheet" />
+
+        <style>
+            header {
+                  padding: 0vh 0 10vh;
+            }
+
+            @media (min-width: 762px) {
+                  header {
+                        padding: 0vh 0 40vh;
+                  }
+
+                  .rsvp {
+                        margin: 0vh 0 30vh;
+                        padding: 4px 0 17px;
+                  }
+            }
+
+            body {
+                  background:rgba(241,234,220, 1);
+            }
+
+            .title {
+                color: white;
+                font-family: 'Cutive Mono', monospace;
+                font-size: 48px;
+                text-shadow: 1px 1px 0px #030303;
+            }
+
+            section {
+                  padding: 150px 0;
+            }
+
+            .light {
+                  background:rgba(130,170, 170, 1);
+                  padding-top:0.5vh;
+                  padding-bottom:0.5vh;
+                  margin-bottom:0vh;
+            }
+
+            .dark {
+                  background:rgba(241,234,220, 1);
+                  padding-top:2vh;
+                  padding-bottom:2vh;
+                  margin-bottom:0vh;
+            }
+
+            img {
+                image-orientation: from-image;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="light">
+            <div class="container text-center">
+                <h1 class='title'>Photo Gallery</h1>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container text-left">
+                <p>
+                    {% for image in images %}
+                        <img src='/static/user_uploads/{{image}}/' width='33%' />
+                    {% endfor %}
+                </p>
+            </div>
+    </body>
+</html>

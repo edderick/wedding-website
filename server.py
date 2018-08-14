@@ -309,10 +309,13 @@ def upload_photos():
 
 @app.route('/gallery')
 def list_files():
-    images = os.listdir(app.config['UPLOAD_FOLDER'])
-    html_images = [
-        "<img src=/static/user_uploads/{}/ width=300>".format(i)
-        for i in images
+    images = [
+        i for i in os.listdir(app.config['UPLOAD_FOLDER'])
         if allowed_file(i)
     ]
-    return ' '.join(html_images)
+
+    props = {
+        'images': images
+    }
+
+    return render_template('gallery.html', **props)
