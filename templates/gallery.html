@@ -73,7 +73,9 @@
             <div class="container text-left">
                 <p>
                     {% for image in images %}
-                        <img src='/static/user_uploads/{{image}}/' width='33%' />
+                        <a href='/static/user_uploads/{{image.full_image}}'>
+                        <img src='/static/user_uploads/{{image.thumbnail}}' width='33%' />
+                        </a>
                     {% endfor %}
                 </p>
             </div>

@@ -351,10 +351,17 @@ def upload_photos():
 
 @app.route('/gallery')
 def list_files():
-    images = sorted([
+    full_images = sorted([
+        i for i in os.listdir(app.config['UPLOAD_FOLDER'])
+        if not is_thumbnail(i)
+    ], reverse=True)
+
+    thumbnails = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
         if is_thumbnail(i)
     ], reverse=True)
+
+    images = [{'full_image': f, 'thumbnail': t} for f,t in zip(full_images, thumbnails)]
 
     props = {
         'images': images
