@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Upload Your Photos</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+
+        <link href="https://fonts.googleapis.com/css?family=Cutive+Mono"
+              rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+
+        <style>
+            header {
+                  padding: 0vh 0 10vh;
+            }
+
+            .rsvp {
+                margin: 0vh 0 10vh;
+                background:rgba(0, 0, 0,0.8);
+                padding: 4px 0 17px;
+                z-index: 2;
+            }
+
+            .rsvp-reminder {
+                margin: 0vh 0 0vh;
+                background:rgba(0, 0, 0,0.8);
+                padding: 5px 0 5px;
+                overflow: hidden;
+                position: fixed; /* Set the navbar to fixed position */
+                top: 0; /* Position the navbar at the top of the page */
+                width: 100%; /* Full width */
+                z-index: 1;
+                display:none;
+            }
+
+            @media (min-width: 762px) {
+                  header {
+                        padding: 0vh 0 40vh;
+                  }
+
+                  .rsvp {
+                        margin: 0vh 0 30vh;
+                        padding: 4px 0 17px;
+                  }
+            }
+
+            body {
+                  background:rgba(241,234,220, 1);
+            }
+
+            .title {
+                color: white;
+                font-family: 'Cutive Mono', monospace;
+                font-size: 48px;
+                text-shadow: 1px 1px 0px #030303;
+            }
+
+            section {
+                  padding: 150px 0;
+            }
+
+            .bg-image {
+                /* The image used */
+                background: red;
+                background-image: url("static/images/selfie.png");
+
+                /* Full height */
+                height: 100%;
+
+                /* Create the parallax scrolling effect */
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .white {
+                  background:rgba(255,255, 255, 0.90);
+                  padding-top:1vh;
+                  padding-bottom:0vh;
+                  margin-top:0vh;
+                  margin-bottom:0.5em;
+            }
+
+            .light {
+                  background:rgba(130,170, 170, 1);
+                  padding-top:0.5vh;
+                  padding-bottom:0.5vh;
+                  margin-bottom:0vh;
+            }
+
+            .dark {
+                  background:rgba(241,234,220, 1);
+                  padding-top:2vh;
+                  padding-bottom:2vh;
+                  margin-bottom:0vh;
+            }
+
+            footer {
+                  background:rgba(0, 0, 0, 0.80);
+                  padding-top:0.5vh;
+                  padding-bottom:0.5vh;
+                  margin-bottom:0vh;
+            }
+
+            .scaled-image {
+                width:100%
+            }
+
+            .scaled-panorama {
+                width:100%
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="light">
+            <div class="container text-center">
+                <h1 class='title'>Upload your Photos</h1>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container text-left">
+                <p>
+                    <strong>Note:</strong> once your photos have been uploaded,
+                    you will not be able to delete them. If you upload
+                    something by mistake, please contact Edward who will remove
+                    the photo for you manually!
+                </p>
+            </div>
+
+            <div class="container text-left">
+                <form action="/upload_photos" class="dropzone">
+                    <div class="dz-message needsclick">
+                         Drop files here or click to upload.<br />
+                    </div>
+                  <div class="fallback">
+                    <input name="file" type="file" multiple />
+                  </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="dark">
+            <div class="container text-center">
+                <p>
+                    <a href='/gallery'>Click here</a> to view the gallery!
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

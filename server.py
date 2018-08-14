@@ -304,19 +304,7 @@ def upload_photos():
             filename = '{}_{}'.format(uuid.uuid4().hex, secure_filename(file.filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/static/user_uploads/{}'.format(filename))
-    return '''
-    <!doctype html>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
-    <title>Upload your photos</title>
-    <h1>Upload your Photos</h1>
-    <p>Please upload your photos to this web page!</p>
-    <form action="/upload_photos" class="dropzone">
-      <div class="fallback">
-        <input name="file" type="file" multiple />
-      </div>
-    </form>
-    '''
+    return render_template('upload.html')
 
 
 @app.route('/gallery')
