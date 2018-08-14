@@ -39,7 +39,7 @@
 
 				$.post("/validate_password", { password }, (data) => {
 					if (data === "success") {
-					   window.location.href = "/site";
+					   window.location.href = "/gallery";
 					}
 					else {
 						alert("Incorrect password, try again or contact Edward or Bethan!");
