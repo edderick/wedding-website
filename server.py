@@ -8,6 +8,9 @@ from random import randint
 from collections import Counter
 from async_email_sender import send_email
 
+from PIL import Image, ExifTags
+from datetime import datetime
+
 import db
 import json
 import os
@@ -287,8 +290,6 @@ def update_rsvp():
     return 'OK'
 
 
-from PIL import Image, ExifTags
-
 def fixExif(filepath):
     try:
 	image=Image.open(filepath)
@@ -325,7 +326,8 @@ def upload_photos():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = '{}_{}'.format(uuid.uuid4().hex, secure_filename(file.filename))
+            timestamp = datetime.isoformat(datetime.now())
+            filename = '{}_{}'.format(timestamp, secure_filename(file.filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             fixExif(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/static/user_uploads/{}'.format(filename))
@@ -334,10 +336,10 @@ def upload_photos():
 
 @app.route('/gallery')
 def list_files():
-    images = [
+    images = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
         if allowed_file(i)
-    ]
+    ], reverse=True)
 
     props = {
         'images': images
