@@ -353,7 +353,7 @@ def upload_photos():
 def list_files():
     full_images = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
-        if not is_thumbnail(i)
+        if allowed_file(i)
     ], reverse=True)
 
     thumbnails = sorted([
