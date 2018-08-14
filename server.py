@@ -65,7 +65,7 @@ def reset():
 def index():
     """Returns the landing page (with password entry)"""
     if request.cookies.get('guest_type') is not None:
-        return redirect('/gallery') # TODO: /site
+        return redirect('/site')
 
     return render_template('index.html')
 
@@ -351,11 +351,6 @@ def upload_photos():
 
 @app.route('/gallery')
 def list_files():
-    guest_type = request.cookies.get('guest_type')
-
-    if guest_type is None:
-        return redirect('/')
-
     full_images = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
         if allowed_file(i)
