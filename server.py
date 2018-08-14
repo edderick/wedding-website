@@ -38,7 +38,7 @@ def allowed_file(filename):
 
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = './static/user_uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/user_uploads')
 
 
 @app.route("/reset")
