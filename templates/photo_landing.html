@@ -26,10 +26,6 @@
                   padding-bottom:5vh;
             }
 
-            .red {
-                color: red;
-            }
-
             @media only screen and (max-width: 576px) {
                 .vertical{
                     margin-top:5vh;
@@ -39,15 +35,22 @@
 
         <script>
             function validatePassword() {
+                const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
 
-				$.post("/validate_password", { password }, (data) => {
+				$.post("/validate_photo_password", { email, password }, (data) => {
 					if (data === "success") {
-					   window.location.href = "/site";
+					   window.location.href = "/upload_photos";
 					}
-					else {
+					else if (data === "email") {
+						alert("Bad email, try again or contact Edward or Bethan!");
+					}
+					else if (data === "password") {
 						alert("Incorrect password, try again or contact Edward or Bethan!");
 					}
+                    else {
+						alert("Something went wrong, try again or contact Edward or Bethan!");
+                    }
 				});
             }
         </script>
@@ -55,14 +58,20 @@
     <body>
         <div class="text-center vertical">
             <div class="transparent">
-                <h1><a href='/photos' class='red'>Click here to upload photos!</a></h1>
                 <h1>Bethan and Edward's Wedding</h1>
-                <h2>Saturday 11th August 2018</h2>
+                <h2>Photo upload login</h2>
                 <br />
-                <h4>Please enter the password from your invite</h4>
+                <h4>Please enter your email address and the password from your invite</h4>
                 <form id='form' class='form-inline justify-content-center' action="javascript:void()">
-					<div class="form-group">
+					<div class="form-row">
+                        <label class="ml-2 mr-1">Email: </label>
+						<input id="email" type="text" class="form-control mr-2"/>
+                    </div>
+					<div class="form-row">
+                        <label class="ml-2 mr-1">Password: </label>
 						<input id="password" type="text" class="form-control mr-2"/>
+                    </div>
+					<div class="form-row">
 						<button onclick="validatePassword()" class="btn btn-primary">&lt;GO&gt;</button>
 					</div>
                 </form>

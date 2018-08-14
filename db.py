@@ -129,3 +129,27 @@ def get_guest_type_for_password(password):
 
 def _connect():
     return sqlite3.connect('sqlite.db')
+
+# --- Photos table ---
+
+_photo_fields = [
+    'email',
+    'full_image',
+    'thumbnail',
+    'timestamp'
+]
+
+def _photo_to_record(photo):
+    return tuple(photo[field] for field in _photo_fields)
+
+def insert_photo(photo):
+    conn = _connect()
+    c = conn.cursor()
+
+    sql = 'INSERT INTO photos ({}) VALUES ({})'.format(
+        ', '.join(_photo_fields),
+        ', '.join(['?'] * len(_photo_fields)))
+
+    c.execute(sql, _photo_to_record(photo))
+
+    conn.commit()

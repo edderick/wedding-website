@@ -30,6 +30,13 @@ except:
     print("Can't create table message")
     pass
 
+try:
+    c.execute('CREATE TABLE photos ({})'.format(
+        ', '.join(db._photo_fields),
+    ))
+except:
+    print("Can't create table photo")
+    pass
 
 # INSERT INTO password vlaues ("day", "day")
 # INSERT INTO password vlaues ("evening", "evening")

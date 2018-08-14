@@ -321,12 +321,60 @@ def createThumbnail(filepath):
     file, ext = os.path.splitext(filepath)
     size = 1024, 1024
     im = Image.open(filepath)
+    if im.mode != "RGB":
+            im = im.convert("RGB")
     im.thumbnail(size)
     im.save(file + ".thumbnail", "JPEG")
+    return os.path.basename(file + ".thumbnail")
+
+
+@app.route("/photos")
+def photo_landing():
+    """Returns the landing page (with password entry)"""
+    if request.cookies.get('guest_type') is not None:
+        return redirect('/site')
+
+    return render_template('photo_landing.html')
+
+
+@app.route("/validate_photo_password", methods=['POST'])
+def validate_photo_password():
+    """Checks the POSTed password against the database.
+       Called from the Photograph landing page.
+    """
+    email = request.form['email'].strip().lower()
+    password = request.form['password'].strip().lower()
+    guest_type = db.get_guest_type_for_password(password)
+
+    if "@" not in email:
+        return make_response('email')
+
+    if not is_legit(email):
+        print('email: {} looks fake...'.format(email))
+        return make_respnse('email')
+
+    if guest_type is None:
+        response = make_response('error')
+        response.set_cookie('guest_type', '',  expires = 0)
+        return 'password'
+
+    response = make_response('success')
+    response.set_cookie('email', email)
+    response.set_cookie('guest_type', guest_type)
+    return response
 
 
 @app.route('/upload_photos', methods=['GET', 'POST'])
 def upload_photos():
+    guest_type = request.cookies.get('guest_type')
+    email = request.cookies.get('email')
+
+    if guest_type is None:
+        return redirect('/photos')
+
+    if email is None:
+        return redirect('/photos')
+
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -344,13 +392,30 @@ def upload_photos():
             full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(full_filename)
             fixExif(full_filename)
-            createThumbnail(full_filename)
+            thumb = createThumbnail(full_filename)
+
+            db.insert_photo({
+                'thumbnail': thumb,
+                'full_image': filename,
+                'email': email,
+                'timestamp': timestamp
+            })
+
             return redirect('/static/user_uploads/{}'.format(filename))
     return render_template('upload.html')
 
 
 @app.route('/gallery')
 def list_files():
+    guest_type = request.cookies.get('guest_type')
+    email = request.cookies.get('email')
+
+    if guest_type is None:
+        return redirect('/photos')
+
+    if email is None:
+        return redirect('/photos')
+
     full_images = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
         if allowed_file(i)
