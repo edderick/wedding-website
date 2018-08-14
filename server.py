@@ -331,8 +331,9 @@ def createThumbnail(filepath):
 @app.route("/photos")
 def photo_landing():
     """Returns the landing page (with password entry)"""
-    if request.cookies.get('guest_type') is not None:
-        return redirect('/site')
+    if request.cookies.get('guest_type') is not None \
+        and request.cookies.get('email') is not None:
+        return redirect('/upload_photos')
 
     return render_template('photo_landing.html')
 
