@@ -41,6 +41,12 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+def is_thumbnail(filename):
+    ALLOWED_EXTENSIONS = set(['thumbnail'])
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/user_uploads')
 
@@ -311,6 +317,13 @@ def fixExif(filepath):
 	# cases: image don't have getexif
 	pass
 
+def createThumbnail(filepath):
+    file, ext = os.path.splitext(filepath)
+    size = 1024, 1024
+    im = Image.open(filepath)
+    im.thumbnail(size)
+    im.save(file + ".thumbnail", "JPEG")
+
 
 @app.route('/upload_photos', methods=['GET', 'POST'])
 def upload_photos():
@@ -328,8 +341,10 @@ def upload_photos():
         if file and allowed_file(file.filename):
             timestamp = datetime.isoformat(datetime.now())
             filename = '{}_{}'.format(timestamp, secure_filename(file.filename))
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            fixExif(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(full_filename)
+            fixExif(full_filename)
+            createThumbnail(full_filename)
             return redirect('/static/user_uploads/{}'.format(filename))
     return render_template('upload.html')
 
@@ -338,7 +353,7 @@ def upload_photos():
 def list_files():
     images = sorted([
         i for i in os.listdir(app.config['UPLOAD_FOLDER'])
-        if allowed_file(i)
+        if is_thumbnail(i)
     ], reverse=True)
 
     props = {
