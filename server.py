@@ -11,6 +11,7 @@ from async_email_sender import send_email
 import db
 import json
 import os
+import uuid
 
 
 # Transient state to prevent abuse
@@ -300,7 +301,7 @@ def upload_photos():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = '{}_{}'.format(uuid.uuid4().hex, secure_filename(file.filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/static/user_uploads/{}'.format(filename))
     return '''
