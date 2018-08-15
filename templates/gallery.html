@@ -12,21 +12,6 @@
               rel="stylesheet" />
 
         <style>
-            header {
-                  padding: 0vh 0 10vh;
-            }
-
-            @media (min-width: 762px) {
-                  header {
-                        padding: 0vh 0 40vh;
-                  }
-
-                  .rsvp {
-                        margin: 0vh 0 30vh;
-                        padding: 4px 0 17px;
-                  }
-            }
-
             body {
                   background:rgba(241,234,220, 1);
             }
@@ -58,6 +43,8 @@
 
             img {
                 image-orientation: from-image;
+                object-fit: cover;
+                height: 100%;
             }
         </style>
 
@@ -79,13 +66,15 @@
 
         <div class="dark">
             <div class="container text-left">
-                <p>
+                <div class="row">
                     {% for image in images %}
+                    <div class="col-lg-4">
                         <a href='/static/user_uploads/{{image.full_image}}'>
-                        <img src='/static/user_uploads/{{image.thumbnail}}' width='33%' />
+                        <img src='/static/user_uploads/{{image.thumbnail}}' class="img-thumbnail img-fluid"/>
                         </a>
+                    </div>
                     {% endfor %}
-                </p>
+                </div>
             </div>
     </body>
 </html>
